@@ -5,8 +5,8 @@ Install Docker https://docs.docker.com/get-docker/
 
 ## 📥 Clone the Repository
 ```
-git clone https://github.com/gaetancorin/Datapipeline_project_master.git
-cd Datapipeline_project_master/Projet_master_RNCP/project_master_ETL
+git clone https://github.com/gaetancorin/Datapipeline_compare_official_vs_gas_stations_oil_prices.git
+cd Datapipeline_compare_official_vs_gas_stations_oil_prices\project_master_ETL
 ```
 
 
