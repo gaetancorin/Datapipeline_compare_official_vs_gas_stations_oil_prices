@@ -1,0 +1,78 @@
+ATTENTES GLOBALES
+
+avoir une bdd relationnel ou non relationnel
+données temps réel
+orchestrateur (airflow)
+calcul distribué (pyspark)
+faire des tests unitaires
+CI/CD avec GitHub action (et tests unitaires)
+système d'alerte avec prometheus flask
+
+
+///////////////////////////////
+ATTENTES DETAILLEES
+
+C4.1.1
+Besoin, enjeux, environnement, contraintes
+
+C4.1.2
+techno sélectionnés, avantages de ces technologies(cloud, performance, etc), point de vigilance, estimation des couts
+
+C4.2.1
+Architecture des données (créer une bdd avec type de données, comment elle est organisé, qui à accès)
+
+C4.2.2
+Présenter 3 méthode de traitement de données
+-temps réel (SQL, python)
+-orchestrateur (airflow)
+-calcul distribués (Spark)
+
+C4.2.3
+Faire une CI/CD (github action permet de rester sur github, faire tourner test unitaire et validé commit)
+(pour cela, je dois créer des tests unitaires)
+
+C4.3.1
+Mettre en place un système de supervision et d'alerte
+Ajouter prometheus a flask, apparement simple
+
+C4.3.2
+faire un petit doc qui explique les date de renouvellement de certificat, echeance de mise a jour, date de maintenance, point de vigilance
+
+C4.3.3
+Utiliser la doc ETL en expliquant pour qui elle est destiné, ce qu'elle présente
+
+C4.4.1
+cahier expliquant les tests, ce qui est attendu, définir si il s agit de test fonctionnel/structurel/sécurité
+
+C4.4.2
+Expliquer en détail un incident technique et sa résolution avec
+nature du problème/ action a mettre en œuvres suivant chaque scenario/ communication pour chaque acteurs/ résultats attendu
+
+
+///////////////////////////////
+explique moi un truc:
+je dois faire 3 trucs:
+-temps réel (SQL, python)
+-orchestrateur (airflow)
+-calcul distribués (Spark)
+
+je dois aussi avoir prometheus et des tests unitaires pour de la ci cd
+
+j'avais pensé récupérer des données btc/usd et eth_usd en websocket et essayer de faire le projet avec.
+
+btc-pipeline/
+├── ingestion/
+│   └── btc_ws_listener.py
+│   └── eth_ws_listener.py
+├── dags/
+│   └── btc_eth_pipeline_dag.py         <-- DAG Airflow
+├── spark_jobs/
+│   └── price_analysis.py           <-- Traitement Spark
+├── metrics/
+│   └── prometheus_exporter.py
+├── tests/
+│   └── test_ingestion.py
+│   └── test_spark.py
+├── Dockerfile
+├── docker-compose.yml              <-- Airflow + Prometheus + PG
+└── requirements.txt

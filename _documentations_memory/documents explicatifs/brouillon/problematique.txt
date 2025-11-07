@@ -1,0 +1,27 @@
+PROBLEMATIQUE:
+Le pôle data du gouvernement français possède un historique sur l'évolution du prix des différentes essences vendu en France. Ces données sont calculés de manière hebdomadaires.
+Malheureusement, ils ne connaissent pas la méthodologie qui ont permis de calculer ces moyennes hebdomadaires a l'époque ou celle-ci ont été calculé.
+Ils se posent donc la question de la véracité et fiabilité des transformations des données récoltés, et souhaiterais que un recalcul soit fait sur d'autres données journalières existantes afin de vérifier la crédibilité des transformations passés.
+Ils aimeraient aussi une vision plus fine des cours des différentes essences vendus en France, afin d'en tirer des conclusions et avoir une meilleur visibilité en terme journalière. Cette aperçu devra être mise a jour régulièrement.
+
+OBJECTIF:
+Réalisation d'un audit sur la qualité des données historiques dans le mesure ou d'autres données journalières Françaises soit existantes.
+Recherche de décalage de prix sur les données historique qui suggèrerait un changement de méthode de calculs de moyenne hebdomadaire.
+Analyses sur une granulométrie temporelle plus fine que actuellement afin d'en tirer des conclusions.
+Le rendu sera fait sous format de visualisations claire qui pourra être rafraichi lors de nouvelles données.
+
+ENVIRONNEMENT:
+L'environnement est laissé libre durant la réalisation du projet. Le projet devra ensuite être entièrement dockerisé afin d'être déployé sur les services d'hébergement de l'état. Le cloud est autorisé car l'utilisation de données Open Data uniquement est utilisé
+
+CADRE REGLEMENTAIRE:
+La doctrine cloud de l'état autorise les données OpenData a être héberger dans des clouds de confiance. 
+Il est donc autorisé d'utiliser des cloud sur ce projet uniquement si ceux ci sont réputé pour leurs fiabilité.
+
+CONTRAINTES:
+Il est obligatoire de ne croiser que les données gouvernementales issus des différents sites internet de l'Etat, afin d'assurer une viabilité des données reconnu par celui-ci.
+
+RSE:
+Une attention particulière devra être fait sur le chargement de données.
+En effet, il faut éviter le surchargement inutile sur l'ensemble de l'historique des données chaque jours, dans une optique de préservation écologique.
+Les problèmes de confidentialités des données suivant la loi RGPD est faiblement impactant sur ce projet, car l'intégralité des données sont déjà disponible en OpenData.
+

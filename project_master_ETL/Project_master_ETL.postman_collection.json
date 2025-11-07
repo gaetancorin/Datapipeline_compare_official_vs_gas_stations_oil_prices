@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "2f579b26-e16e-4a3e-93b3-11d360ace4d4",
+		"name": "Project_master_ETL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21985586"
+	},
+	"item": [
+		{
+			"name": "/is_alive",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/is_alive",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"is_alive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/etl/launch_complete_pipeline_oil_prices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year_to_load",
+							"value": "2020",
+							"type": "text"
+						},
+						{
+							"key": "drop_mongo_collections",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/etl/launch_complete_pipeline_oil_prices",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"etl",
+						"launch_complete_pipeline_oil_prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/etl/launch_etl_gas_stations_oil_prices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year_to_load",
+							"value": "2008",
+							"type": "text"
+						},
+						{
+							"key": "drop_mongo_collections",
+							"value": "true",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/etl/launch_etl_gas_stations_oil_prices",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"etl",
+						"launch_etl_gas_stations_oil_prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/etl/launch_etl_official_oil_prices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year_to_load",
+							"value": "2009",
+							"type": "text"
+						},
+						{
+							"key": "drop_mongo_collections",
+							"value": "true",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/etl/launch_etl_official_oils_prices",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"etl",
+						"launch_etl_official_oils_prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/dataviz/denormalize_station_prices_for_dataviz",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year_to_load",
+							"value": "2007",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "drop_mongo_collections",
+							"value": "true",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/dataviz/denormalize_station_prices_for_dataviz",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"dataviz",
+						"denormalize_station_prices_for_dataviz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/dataviz/merge_denorm_station_vs_official_prices",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "year_to_load",
+							"value": "2010",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "drop_mongo_collections",
+							"value": "true",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/dataviz/merge_denorm_station_vs_official_prices",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"dataviz",
+						"merge_denorm_station_vs_official_prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mongo/list_all_mongo_collections",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mongo/list_all_mongo_collections",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mongo",
+						"list_all_mongo_collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mongo/drop_one_collection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "db_name",
+							"value": "datalake2",
+							"type": "text"
+						},
+						{
+							"key": "collection_name",
+							"value": "official_oils_prices",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mongo/drop_one_collection",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mongo",
+						"drop_one_collection"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/mongo/drop_one_bdd",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "db_name",
+							"value": "datalake2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mongo/drop_one_bdd",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mongo",
+						"drop_one_bdd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/list_S3_contents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/utils/list_S3_contents",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"utils",
+						"list_S3_contents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/save_mongo_dump_to_S3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "db_name",
+							"value": "denormalization",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/utils/save_mongo_dump_to_S3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"utils",
+						"save_mongo_dump_to_S3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/restore_mongo_dump_from_S3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "zip_name",
+							"value": "datalake_2025_06_22.zip",
+							"type": "text"
+						},
+						{
+							"key": "new_bdd_name",
+							"value": "datalake_2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/utils/restore_mongo_dump_from_S3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"utils",
+						"restore_mongo_dump_from_S3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

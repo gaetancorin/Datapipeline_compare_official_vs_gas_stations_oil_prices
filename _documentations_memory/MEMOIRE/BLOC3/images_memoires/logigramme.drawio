@@ -1,0 +1,76 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.6">
+  <diagram name="Page-1" id="qM84p_TXzcxnUF4Jgppu">
+    <mxGraphModel dx="927" dy="531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="B7265Aana-1PgYvmfiE8-1" value="Retard sur le projet sur le sprint 1 non rattrapé au sprint 2" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-2" value="Augmenter les heures de travail journalier" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-3" value="Choix" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="270" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-4" value="Fatigue des équipes" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-5" value="Demander l&#39;avis du client" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-6" value="Choix" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="420" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-7" value="Obtenir une rallonge budgétaire pour rajouter un sprint supplémentaire" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-8" value="Retirer une fonctionnalité non bloquante" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="570" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-10" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="B7265Aana-1PgYvmfiE8-1" target="B7265Aana-1PgYvmfiE8-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="380" as="sourcePoint" />
+            <mxPoint x="360" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-11" value="" style="endArrow=classic;html=1;rounded=0;entryX=-0.011;entryY=0.607;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="B7265Aana-1PgYvmfiE8-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="280" as="sourcePoint" />
+            <mxPoint x="440" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-12" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="B7265Aana-1PgYvmfiE8-2" target="B7265Aana-1PgYvmfiE8-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="540" y="310" as="sourcePoint" />
+            <mxPoint x="580" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-13" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.68;exitY=0.848;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="B7265Aana-1PgYvmfiE8-3" target="B7265Aana-1PgYvmfiE8-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="380" as="sourcePoint" />
+            <mxPoint x="360" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-14" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="B7265Aana-1PgYvmfiE8-5" target="B7265Aana-1PgYvmfiE8-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="440" as="sourcePoint" />
+            <mxPoint x="360" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-15" value="" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="B7265Aana-1PgYvmfiE8-6" target="B7265Aana-1PgYvmfiE8-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="488.5600000000002" y="489.99999999999994" as="sourcePoint" />
+            <mxPoint x="460" y="508.56" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="B7265Aana-1PgYvmfiE8-16" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.68;exitY=0.848;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" target="B7265Aana-1PgYvmfiE8-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="524" y="480" as="sourcePoint" />
+            <mxPoint x="570" y="512" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

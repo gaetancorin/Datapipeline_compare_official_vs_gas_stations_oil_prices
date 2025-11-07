@@ -1,0 +1,55 @@
+Architecture APIs et Fonctions:
+
+/etl/launch_complete_pipeline_oils_prices
+    /etl/launch_etl_gas_stations_oils_prices
+        determine_dates_to_load_from_mongo()
+        extract_new_gas_stations_oils_prices()
+        transform_gas_stations_oils_prices()
+        load_gas_stations_oils_prices_to_mongo()
+    /etl/launch_etl_official_oils_prices
+        determine_dates_to_load_from_mongo()
+        extract_new_official_oils_prices()
+        transform_official_oils_prices()
+        load_official_oils_prices_to_mongo()
+    /dataviz/denormalize_station_prices_for_dataviz
+        determine_dates_to_load_from_mongo()
+        extract_new_station_prices_from_mongo()
+        transform_and_denormalize_station_prices()
+        load_denormalized_station_prices()
+    /dataviz/merge_denorm_station_vs_official_prices
+        determine_dates_to_load_from_mongo()
+        extract_new_denorm_station_prices_from_mongo()
+        extract_new_official_oils_prices_from_mongo()
+        transform_merge_station_vs_official_prices()
+        load_denorm_station_vs_official_prices()
+/mongo/drop_one_collection
+/mongo/drop_one_bdd
+/utils/save_mongo_dump_to_S3
+/utils/list_S3_contents
+/utils/restore_mongo_dump_from_S3
+/is_alive
+
+Mongo db_name et collections:
+
+datalake:
+    gas_stations_infos
+    gas_stations_price_logs_eur
+    official_oils_prices (official_ttc_gas_eur_liter)
+denormalization:
+    denorm_station_prices (station_ttc_gas_eur_liter)
+    denorm_station_vs_official_prices (all_ttc_gas_eur_liter)
+
+
+COUNT:
+39 513 801 elements in gas_stations_price_logs_eur
+13 660 elements in gas_stations_infos
+2 112 elements in official_oils_prices
+
+6 749 elements in denorm_station_prices
+7 897 elements in denorm_station_vs_official_prices
+
+ALL loading: 1h25
+
+et dans csv:
+56 651 223
+

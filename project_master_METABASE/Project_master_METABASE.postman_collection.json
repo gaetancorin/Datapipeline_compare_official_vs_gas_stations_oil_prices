@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "678d6801-22a3-4d2d-98dd-07498cdaba9b",
+		"name": "Project_master_METABASE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21985586"
+	},
+	"item": [
+		{
+			"name": "/is_alive",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/is_alive",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"is_alive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/launch_metabase",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/launch_metabase",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"launch_metabase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/stop_metabase",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/stop_metabase",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"stop_metabase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/list_S3_contents",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/utils/list_S3_contents",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"utils",
+						"list_S3_contents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/save_metabase_db_to_S3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/utils/save_metabase_db_to_S3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"utils",
+						"save_metabase_db_to_S3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/utils/restore_metabase_db_from_S3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "zip_name",
+							"value": "metabase_db/metabase.db_2025_06_27.zip",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5001/utils/restore_metabase_db_from_S3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5001",
+					"path": [
+						"utils",
+						"restore_metabase_db_from_S3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
