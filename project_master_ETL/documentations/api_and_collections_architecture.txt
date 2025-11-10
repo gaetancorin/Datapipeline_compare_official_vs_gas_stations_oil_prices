@@ -29,18 +29,20 @@ Architecture APIs et Fonctions:
 /utils/restore_mongo_dump_from_S3
 /is_alive
 
-Mongo db_name et collections:
+-- MongoDB --
+databases_names:
+    collections
 
 datalake:
     gas_stations_infos
     gas_stations_price_logs_eur
-    official_oils_prices (official_ttc_gas_eur_liter)
+    official_oils_prices
 denormalization:
-    denorm_station_prices (station_ttc_gas_eur_liter)
-    denorm_station_vs_official_prices (all_ttc_gas_eur_liter)
+    denorm_station_prices
+    denorm_station_vs_official_prices
 
 
-COUNT:
+COUNT (if loaded 2007 to 2025):
 39 513 801 elements in gas_stations_price_logs_eur
 13 660 elements in gas_stations_infos
 2 112 elements in official_oils_prices
@@ -50,6 +52,6 @@ COUNT:
 
 ALL loading: 1h25
 
-et dans csv:
-56 651 223
+and inside csv:
+56 651 223 rows
 

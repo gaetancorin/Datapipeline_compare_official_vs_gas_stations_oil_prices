@@ -1,13 +1,3 @@
----- Paramètrage WSL dans Windows -----
-parametrer  15gb de mémoire et 4 processeurs pour wsl lorsque docker desktop est allumé en créant le fichier C:\Users\gaeta\.wslconfig
-contenu du fichier:
-[wsl2]
-memory=15GB
-processors=4
-swap=0
-
-redemarrer wsl avec PowerShell: wsl --shutdown
-
 ------ Dans le flask project_master_ETL ------
 Construire l'image:
 docker build -t project_master_etl .
@@ -27,3 +17,14 @@ docker stop project_master_etl
 docker rm project_master_etl
 
 Warning! The Docker image causes a +2 hour shift, so a scheduler set for 10:00 French local time in the code will run at 12:00 French local time inside the container.
+
+---- Paramètrage WSL dans Windows -----
+parametrer  15gb de mémoire et 4 processeurs pour wsl lorsque docker desktop est allumé en créant le fichier C:\Users\gaeta\.wslconfig
+contenu du fichier:
+[wsl2]
+memory=15GB
+processors=4
+swap=0
+
+redemarrer wsl avec PowerShell: wsl --shutdown
+

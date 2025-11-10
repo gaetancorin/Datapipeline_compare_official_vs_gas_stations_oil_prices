@@ -39,12 +39,10 @@ def extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
     # years_to_load = ["2007", "2008"]
 
     # clean working xml/csv folders and recreate it
-    if os.path.exists("outputs/xml_gas_stations"):
-        shutil.rmtree("outputs/xml_gas_stations")
-    os.makedirs("outputs/xml_gas_stations", exist_ok=True)
-    if os.path.exists("outputs/original_gas_stations"):
-        shutil.rmtree("outputs/original_gas_stations")
-    os.makedirs("outputs/original_gas_stations", exist_ok=True)
+    if os.path.exists("outputs/stations_prices_source"):
+        shutil.rmtree("outputs/stations_prices_source")
+    os.makedirs("outputs/stations_prices_source/xml", exist_ok=True)
+    os.makedirs("outputs/stations_prices_source/csv", exist_ok=True)
 
     # Loading targeting datas
     for year in years_to_load:
@@ -67,11 +65,11 @@ def extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
 
         # save original xml file in local
         with zipfile.ZipFile(io.BytesIO(response.content), 'r') as zip_ref:
-            zip_ref.extractall("outputs/xml_gas_stations")
+            zip_ref.extractall("outputs/stations_prices_source/xml")
         print(file_name, "extracted")
 
         # transform xml to df
-        tree = ET.parse(f"outputs/xml_gas_stations/PrixCarburants_annuel_{year}.xml")
+        tree = ET.parse(f"outputs/stations_prices_source/xml/PrixCarburants_annuel_{year}.xml")
         root = tree.getroot()
         data = []
         for pdv in root.findall("pdv"):
@@ -119,7 +117,7 @@ def extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
         df['valeur'] = df['valeur'] * 1000 if int(year) > 2021 else df['valeur']
 
         # Save df to csv
-        df.to_csv(f"outputs/original_gas_stations/PrixCarburants_annuel_{year}.csv", index=False)
+        df.to_csv(f"outputs/stations_prices_source/csv/stations_prices_source_{year}.csv", index=False)
         print(df.head(5))
         print("END LOAD", year)
     print("END LOAD", years_to_load)
@@ -129,15 +127,17 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
     print("[INFO] Start transform_gas_stations_oils_prices")
 
     # clean working csv folder and recreate it
-    if os.path.exists("outputs/filtered_gas_stations"):
-        shutil.rmtree("outputs/filtered_gas_stations")
-    os.makedirs("outputs/filtered_gas_stations", exist_ok=True)
+    if os.path.exists("outputs/stations_prices_transformed"):
+        shutil.rmtree("outputs/stations_prices_transformed")
+    os.makedirs("outputs/stations_prices_transformed", exist_ok=True)
 
-    files_names = os.listdir("outputs/original_gas_stations")
+    files_names = os.listdir("outputs/stations_prices_source/csv")
     print(files_names)
     for file_name in files_names:
+        if file_name == "xml":
+            pass
         print("Transform", file_name)
-        file_path = f"outputs/original_gas_stations/{file_name}"
+        file_path = f"outputs/stations_prices_source/csv/{file_name}"
         year = file_name.split("_")[-1].split(".")[0]
         if not os.path.exists(file_path):
             print(f"{file_path} file not exist.")
@@ -156,41 +156,41 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
                 (df_prices['date'] <= end_date_to_load)
                 ]
             if df_prices.empty:
-                print(f"[INFO] No data in gas_stations_oils_prices between {start_date_to_load} and {end_date_to_load}")
+                print(f"[INFO] No data in stations_prices_source between {start_date_to_load} and {end_date_to_load}")
                 return None
             print(df_prices.head(5))
 
-            print("gas-station oils availables:\n", df_prices["nom"].dropna().unique())
+            print("stations_prices_source oils availables:\n", df_prices["nom"].dropna().unique())
 
             print('clean df by standard deviation and z-score')
             # for each day and type of oil, define standard deviation
             df_prices["z_score"] = df_prices.groupby(["date", "nom"])["valeur"].transform(lambda x: zscore(x, ddof=0))
             # delete all datas who have big standard deviation by z-score
-            df_prices_filtered = df_prices[abs(df_prices["z_score"]) < 1]
-            df_prices_filtered = df_prices_filtered.drop(columns=["z_score"])
+            df_prices_transformed = df_prices[abs(df_prices["z_score"]) < 1]
+            df_prices_transformed = df_prices_transformed.drop(columns=["z_score"])
 
             print('reduce df by keeping only last datas by days, oils and stations')
             # keep only last value of each day and each oil for each station to reduce datas (after z-score cleaning)
-            df_prices_filtered['heuremin'] = pd.to_datetime(df_prices_filtered['heuremin'], format='%H:%M',errors='coerce')
-            df_prices_filtered = df_prices_filtered.sort_values(by=['id', 'date', 'nom', 'heuremin'])
-            df_prices_filtered = df_prices_filtered.groupby(['id', 'date', 'nom'], as_index=False).last()
+            df_prices_transformed['heuremin'] = pd.to_datetime(df_prices_transformed['heuremin'], format='%H:%M',errors='coerce')
+            df_prices_transformed = df_prices_transformed.sort_values(by=['id', 'date', 'nom', 'heuremin'])
+            df_prices_transformed = df_prices_transformed.groupby(['id', 'date', 'nom'], as_index=False).last()
 
             # change date and heuremin to str
-            df_prices_filtered["date"] = df_prices_filtered["date"].dt.strftime('%Y_%m_%d')
-            df_prices_filtered["heuremin"] = df_prices_filtered["heuremin"].dt.strftime('%H:%M')
+            df_prices_transformed["date"] = df_prices_transformed["date"].dt.strftime('%Y_%m_%d')
+            df_prices_transformed["heuremin"] = df_prices_transformed["heuremin"].dt.strftime('%H:%M')
 
             # rename id to id_station_essence
-            df_prices_filtered["id_station_essence"] = df_prices_filtered["id"]
-            df_prices_filtered = df_prices_filtered.drop(columns=["id"])
+            df_prices_transformed["id_station_essence"] = df_prices_transformed["id"]
+            df_prices_transformed = df_prices_transformed.drop(columns=["id"])
 
             # transform oil prices 500-2000 to 0.5-2.0
-            df_prices_filtered['valeur'] = (df_prices_filtered['valeur'] * 0.001).round(5)
+            df_prices_transformed['valeur'] = (df_prices_transformed['valeur'] * 0.001).round(5)
 
-            df_prices_filtered.columns = [col.capitalize() for col in df_prices_filtered.columns]
+            df_prices_transformed.columns = [col.capitalize() for col in df_prices_transformed.columns]
 
             # Save df to csv
-            df_prices_filtered.to_csv(f"outputs/filtered_gas_stations/PrixCarburants_annuel_filtered_{year}.csv", index=False)
-            print(df_prices_filtered.head(5))
+            df_prices_transformed.to_csv(f"outputs/stations_prices_transformed/stations_prices_transformed_{year}.csv", index=False)
+            print(df_prices_transformed.head(5))
             print("END LOAD", year)
     print("END LOAD", files_names)
     return "done"
@@ -199,18 +199,18 @@ def load_gas_stations_oils_prices_to_mongo():
     print("[INFO] Start load_gas_stations_oil_prices_to_mongo")
 
     # clean working csv folder and recreate it
-    if os.path.exists("outputs/gas_stations_infos"):
-        shutil.rmtree("outputs/gas_stations_infos")
-    os.makedirs("outputs/gas_stations_infos", exist_ok=True)
-    if os.path.exists("outputs/gas_stations_price_logs_eur"):
-        shutil.rmtree("outputs/gas_stations_price_logs_eur")
-    os.makedirs("outputs/gas_stations_price_logs_eur", exist_ok=True)
+    if os.path.exists("outputs/stations_infos"):
+        shutil.rmtree("outputs/stations_infos")
+    os.makedirs("outputs/stations_infos", exist_ok=True)
+    if os.path.exists("outputs/stations_prices"):
+        shutil.rmtree("outputs/stations_prices")
+    os.makedirs("outputs/stations_prices", exist_ok=True)
 
-    files_names = os.listdir("outputs/filtered_gas_stations")
+    files_names = os.listdir("outputs/stations_prices_transformed")
     print(files_names)
     for file_name in files_names:
         print("Load", file_name)
-        file_path = f"outputs/filtered_gas_stations/{file_name}"
+        file_path = f"outputs/stations_prices_transformed/{file_name}"
         year = file_name.split("_")[-1].split(".")[0]
         if not os.path.exists(file_path):
             print(f"{file_path} file not exist.")
@@ -219,29 +219,29 @@ def load_gas_stations_oils_prices_to_mongo():
             print("rows =", len(df))
             df['Date'] = pd.to_datetime(df['Date'], format='%Y_%m_%d')
 
-            # Split data to gas_stations_infos and gas_stations_price_logs
-            # update gas_stations_infos
-            df_gas_stations = df[['Id_station_essence', 'Adresse', 'Ville', 'Cp', 'Latitude', 'Longitude', 'Date']]
+            # Split data to stations_infos and stations_price
+            # update stations_infos
+            df_stations_infos = df[['Id_station_essence', 'Adresse', 'Ville', 'Cp', 'Latitude', 'Longitude', 'Date']]
             # Keep the latest Date(most recent) by Sort 'Id_station_essence' and 'Date' and keep the last
-            df_gas_stations = df_gas_stations.sort_values(['Id_station_essence','Date'], ascending=[True, True])
-            df_gas_stations = df_gas_stations.drop_duplicates(subset=['Id_station_essence'], keep='last').reset_index(drop=True)
-            df_gas_stations = df_gas_stations.rename(columns={"Date": "Derniere_maj"})
-            print('gas_stations_infos \n', df_gas_stations.head(5))
+            df_stations_infos = df_stations_infos.sort_values(['Id_station_essence','Date'], ascending=[True, True])
+            df_stations_infos = df_stations_infos.drop_duplicates(subset=['Id_station_essence'], keep='last').reset_index(drop=True)
+            df_stations_infos = df_stations_infos.rename(columns={"Date": "Derniere_maj"})
+            print('stations_infos \n', df_stations_infos.head(5))
             # Save df to csv
-            df_gas_stations.to_csv(f"outputs/gas_stations_infos/gas_stations_infos_{year}.csv",index=False)
+            df_stations_infos.to_csv(f"outputs/stations_infos/stations_infos_{year}.csv",index=False)
             # Save df to Mongo
-            mongo_manager.update_gas_stations_infos(df_gas_stations, db_name= "datalake", collection= "gas_stations_infos")
+            mongo_manager.update_gas_stations_infos(df_stations_infos, db_name= "datalake", collection= "gas_stations_infos")
 
 
-            # add gas_stations_price_logs
-            df_gas_stations_price_logs = df[['Date', 'Id_station_essence', 'Nom', 'Valeur', 'Heuremin']]
-            print('gas_station_prices_logs \n', df_gas_stations_price_logs.head(5))
+            # add stations_prices
+            df_stations_prices = df[['Date', 'Id_station_essence', 'Nom', 'Valeur', 'Heuremin']]
+            print('stations_prices \n', df_stations_prices.head(5))
             # Save df to csv
-            df_gas_stations_price_logs.to_csv(f"outputs/gas_stations_price_logs_eur/gas_station_prices_logs_eur_{year}.csv", index=False)
+            df_stations_prices.to_csv(f"outputs/stations_prices/stations_prices_{year}.csv", index=False)
             # Save df to Mongo
-            result = mongo_manager.load_datas_to_mongo(df_gas_stations_price_logs, bdd= "datalake", collection= "gas_stations_price_logs_eur", index= ["Date", "Nom"])
+            result = mongo_manager.load_datas_to_mongo(df_stations_prices, bdd= "datalake", collection= "gas_stations_price_logs_eur", index= ["Date", "Nom"])
             if result:
-                print("correctly loaded", file_name, "on mongo collection 'gas_stations_price_logs_eur'")
+                print("correctly loaded", file_name, "on mongo collection 'stations_prices'")
 
         print("END LOAD", file_name)
     print("END LOAD", files_names)

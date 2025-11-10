@@ -31,9 +31,9 @@ def extract_new_official_oils_prices():
     print("[INFO] Start extract_new_official_oils_prices")
 
     # clean working csv folder and recreate it
-    if os.path.exists("outputs/official_oils_prices"):
-        shutil.rmtree("outputs/official_oils_prices")
-    os.makedirs("outputs/official_oils_prices", exist_ok=True)
+    if os.path.exists("outputs/denorm_official_prices"):
+        shutil.rmtree("outputs/denorm_official_prices")
+    os.makedirs("outputs/denorm_official_prices", exist_ok=True)
 
     # Source = "https://www.ecologie.gouv.fr/politiques-publiques/prix-produits-petroliers" (gouvernemental opendata website)
     # example of url get by bot (always change because of UUID)=
@@ -42,10 +42,10 @@ def extract_new_official_oils_prices():
 
     # need to load file in local because of SSL certificate
     response = requests.get(url, verify=False)
-    with open("outputs/official_oils_prices/temp_file.xlsx", "wb") as f:
+    with open("outputs/denorm_official_prices/temp_file.xlsx", "wb") as f:
         f.write(response.content)
-    df_official_oils_prices = pd.read_excel("outputs/official_oils_prices/temp_file.xlsx", sheet_name=1, skiprows=0)
-    return df_official_oils_prices
+    df_official_prices = pd.read_excel("outputs/denorm_official_prices/temp_file.xlsx", sheet_name=1, skiprows=0)
+    return df_official_prices
 
 
 def transform_official_oils_prices(df_official_oils_prices, start_date_to_load, end_date_to_load):
@@ -80,7 +80,7 @@ def load_official_oils_prices_to_mongo(df_official_oils_prices):
     # Save df to csv
     start_year = df_official_oils_prices['Date'].min().year
     end_year = df_official_oils_prices['Date'].max().year
-    df_official_oils_prices.to_csv(f"outputs/official_oils_prices/official_oils_prices_{start_year}_{end_year}.csv", index=False)
+    df_official_oils_prices.to_csv(f"outputs/denorm_official_prices/denorm_official_prices_{start_year}_{end_year}.csv", index=False)
 
     # Save df to Mongo
     result = mongo_manager.load_datas_to_mongo(df_official_oils_prices, bdd="datalake",collection="official_oils_prices", index=["Date"])
