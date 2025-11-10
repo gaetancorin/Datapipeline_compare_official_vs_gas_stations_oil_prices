@@ -22,7 +22,7 @@ def launch_etl_gas_stations_oils_prices(year_to_load = None, drop_mongo_collecti
     if drop_mongo_collections == "true":
         print("[INFO] Drop Mongo collections")
         mongo_manager.drop_mongo_collections(bdd = "datalake", collections= ["gas_stations_infos", "gas_stations_price_logs_eur"])
-    start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "datalake", collection= "gas_stations_price_logs_eur")
+    start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "datalake", collection= "gas_stations_prices")
     extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
     result = transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
     if result == None:
@@ -239,7 +239,7 @@ def load_gas_stations_oils_prices_to_mongo():
             # Save df to csv
             df_stations_prices.to_csv(f"outputs/stations_prices/stations_prices_{year}.csv", index=False)
             # Save df to Mongo
-            result = mongo_manager.load_datas_to_mongo(df_stations_prices, bdd= "datalake", collection= "gas_stations_price_logs_eur", index= ["Date", "Nom"])
+            result = mongo_manager.load_datas_to_mongo(df_stations_prices, bdd= "datalake", collection= "gas_stations_prices", index= ["Date", "Nom"])
             if result:
                 print("correctly loaded", file_name, "on mongo collection 'stations_prices'")
 

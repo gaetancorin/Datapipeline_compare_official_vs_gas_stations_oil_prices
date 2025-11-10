@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-def get_url_for_download_official_oils_prices():
+def get_url_for_download_denorm_official_oils_prices():
     print("[INFO] Starting BOT process for get download official oils prices URL")
     go_time = time.time()
     chrome_options = Options()

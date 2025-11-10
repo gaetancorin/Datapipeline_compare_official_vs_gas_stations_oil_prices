@@ -49,7 +49,7 @@ def extract_new_denorm_station_prices_from_mongo(start_date_to_load, end_date_to
 def extract_new_official_oils_prices_from_mongo(start_date_to_load, end_date_to_load):
     print("[INFO] Start extract_new_official_oils_prices_from_mongo")
 
-    df_official_oils = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="datalake", collection="official_oils_prices")
+    df_official_oils = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="denormalization", collection="denorm_official_prices")
     if df_official_oils.empty:
         print(f"[WARNING] Into merge, No existing datas on official_oils_prices for Date {start_date_to_load} to {end_date_to_load}")
         return df_official_oils

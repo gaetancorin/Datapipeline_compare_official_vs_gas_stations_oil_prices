@@ -4,31 +4,31 @@ import os
 import warnings
 import requests
 import App.utils as utils
+import App.utils_bot as official_bot
 import App.mongo_manager as mongo_manager
-import App.official_oils_prices_bot as official_bot
 
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
-def launch_etl_official_oils_prices(year_to_load = None, drop_mongo_collections = None):
-    print("[INFO] Start launch_etl_official_oils_prices")
+def launch_etl_denormalize_official_oils_prices(year_to_load = None, drop_mongo_collections = None):
+    print("[INFO] Start launch_etl_denormalize_official_oils_prices")
     if year_to_load != None and int(year_to_load) < 1985:
         print(f"[WARNING] {year_to_load} 'year_to_load' parameter is < 1985, so data is not available at this date for official_oils_prices")
         return "done"
     if drop_mongo_collections == "true":
         print("[INFO] Drop Mongo collections")
         mongo_manager.drop_mongo_collections(bdd = "datalake", collections= ["official_oils_prices"])
-    start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "datalake", collection= "official_oils_prices")
-    df_official_oils_prices = extract_new_official_oils_prices()
-    df_official_oils_prices = transform_official_oils_prices(df_official_oils_prices, start_date_to_load, end_date_to_load)
+    start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "denormalization", collection= "denorm_official_prices")
+    df_official_oils_prices = extract_new_denorm_official_oils_prices()
+    df_official_oils_prices = transform_denorm_official_oils_prices(df_official_oils_prices, start_date_to_load, end_date_to_load)
     if df_official_oils_prices.empty:
         print(f"[INFO] No data in official_oils_prices between {start_date_to_load} and {end_date_to_load}")
         return "done"
-    load_official_oils_prices_to_mongo(df_official_oils_prices)
+    load_denormalize_official_oils_prices_to_mongo(df_official_oils_prices)
     return "done"
 
 
-def extract_new_official_oils_prices():
-    print("[INFO] Start extract_new_official_oils_prices")
+def extract_new_denorm_official_oils_prices():
+    print("[INFO] Start extract_new_denorm_official_oils_prices")
 
     # clean working csv folder and recreate it
     if os.path.exists("outputs/denorm_official_prices"):
@@ -38,7 +38,7 @@ def extract_new_official_oils_prices():
     # Source = "https://www.ecologie.gouv.fr/politiques-publiques/prix-produits-petroliers" (gouvernemental opendata website)
     # example of url get by bot (always change because of UUID)=
     # "https://www.ecologie.gouv.fr/simulator-energies/monitoring/export/59707a7b55c0012d0efade376d62a56d3c86129a"
-    url = official_bot.get_url_for_download_official_oils_prices()
+    url = official_bot.get_url_for_download_denorm_official_oils_prices()
 
     # need to load file in local because of SSL certificate
     response = requests.get(url, verify=False)
@@ -48,8 +48,8 @@ def extract_new_official_oils_prices():
     return df_official_prices
 
 
-def transform_official_oils_prices(df_official_oils_prices, start_date_to_load, end_date_to_load):
-    print("[INFO] Start transform_official_oils_prices")
+def transform_denorm_official_oils_prices(df_official_oils_prices, start_date_to_load, end_date_to_load):
+    print("[INFO] Start transform_denorm_official_oils_prices")
 
     # rename columns
     df_official_oils_prices = df_official_oils_prices.rename(columns={
@@ -74,8 +74,8 @@ def transform_official_oils_prices(df_official_oils_prices, start_date_to_load, 
     return df_official_oils_prices
 
 
-def load_official_oils_prices_to_mongo(df_official_oils_prices):
-    print("[INFO] Start load_official_oils_prices_to_mongo")
+def load_denormalize_official_oils_prices_to_mongo(df_official_oils_prices):
+    print("[INFO] Start load_denormalize_official_oils_prices_to_mongo")
 
     # Save df to csv
     start_year = df_official_oils_prices['Date'].min().year
@@ -83,7 +83,7 @@ def load_official_oils_prices_to_mongo(df_official_oils_prices):
     df_official_oils_prices.to_csv(f"outputs/denorm_official_prices/denorm_official_prices_{start_year}_{end_year}.csv", index=False)
 
     # Save df to Mongo
-    result = mongo_manager.load_datas_to_mongo(df_official_oils_prices, bdd="datalake",collection="official_oils_prices", index=["Date"])
+    result = mongo_manager.load_datas_to_mongo(df_official_oils_prices, bdd="denormalization",collection="denorm_official_prices", index=["Date"])
     if result:
         print(f"correctly loaded official_oils_prices_{start_year}_{end_year} on mongo collection 'official_oils_prices'")
 

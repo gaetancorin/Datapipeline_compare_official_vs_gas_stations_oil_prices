@@ -4,8 +4,8 @@ import pandas as pd
 import App.utils as utils
 import App.mongo_manager as mongo_manager
 
-def denormalize_station_prices_for_dataviz(year_to_load = None, drop_mongo_collections = None):
-    print("[INFO] Start denormalize_station_prices_for_dataviz")
+def launch_etl_denormalize_station_prices(year_to_load = None, drop_mongo_collections = None):
+    print("[INFO] Start launch_etl_denormalize_station_prices")
     if year_to_load != None and int(year_to_load) < 2007:
         print(f"[WARNING] {year_to_load} 'year_to_load' parameter is < 2007, so data is not available at this date for denormalize_station_prices_for_dataviz")
         return "done"
@@ -27,9 +27,9 @@ def denormalize_station_prices_for_dataviz(year_to_load = None, drop_mongo_colle
         if end_date >= end_date_to_load:
             end_date = end_date_to_load
         print(f"[INFO] Start denormalize station prices for year {start_date.year}")
-        df_stations_price_logs = extract_new_station_prices_from_mongo(start_date, end_date)
+        df_stations_price_logs = extract_station_prices_from_mongo(start_date, end_date)
         if df_stations_price_logs.empty:
-            print(f"[WARNING] No found data in 'gas_stations_price_logs_eur' collection  between {start_date} et {end_date}")
+            print(f"[WARNING] No found data in 'gas_stations_prices' collection  between {start_date} et {end_date}")
         else:
             df_denorm_station_prices = transform_and_denormalize_station_prices(df_stations_price_logs)
             load_denormalized_station_prices(df_denorm_station_prices)
@@ -37,21 +37,21 @@ def denormalize_station_prices_for_dataviz(year_to_load = None, drop_mongo_colle
     return "done"
 
 
-def extract_new_station_prices_from_mongo(start_date_to_load, end_date_to_load):
-    print("[INFO] Start extract_new_station_prices_from_mongo")
-    df_stations_price_logs = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="datalake", collection="gas_stations_price_logs_eur")
-    if df_stations_price_logs.empty:
-        print(f"[WARNING] No existing datas on gas_stations_price_logs_eur for Date {start_date_to_load} to {end_date_to_load}")
-        return df_stations_price_logs
-    df_stations_price_logs = df_stations_price_logs[["Id_station_essence", "Date", "Nom", "Valeur"]]
+def extract_station_prices_from_mongo(start_date_to_load, end_date_to_load):
+    print("[INFO] Start extract_station_prices_from_mongo")
+    df_stations_prices = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="datalake", collection="gas_stations_prices")
+    if df_stations_prices.empty:
+        print(f"[WARNING] No existing datas on gas_stations_prices for Date {start_date_to_load} to {end_date_to_load}")
+        return df_stations_prices
+    df_stations_prices = df_stations_prices[["Id_station_essence", "Date", "Nom", "Valeur"]]
 
-    print(f"[INFO] Found {len(df_stations_price_logs)} rows into gas_stations_price_logs_eur between {start_date_to_load} and {end_date_to_load}")
-    return df_stations_price_logs
+    print(f"[INFO] Found {len(df_stations_prices)} rows into gas_stations_prices between {start_date_to_load} and {end_date_to_load}")
+    return df_stations_prices
 
 
-def transform_and_denormalize_station_prices(df_stations_price_logs):
+def transform_and_denormalize_station_prices(df_stations_prices):
     print("[INFO] Start transform_and_denormalize_station_prices")
-    df_denorm_station_prices = df_stations_price_logs.rename(columns={
+    df_denorm_station_prices = df_stations_prices.rename(columns={
         "Id_station_essence": "Gas_station_id", "Nom": "Gas_name", "Valeur": "Gas_eur_liter"
     })
     df_denorm_station_prices['Date'] = pd.to_datetime(df_denorm_station_prices['Date'])
