@@ -23,7 +23,7 @@ def launch_etl_gas_stations_oils_prices(year_to_load = None, drop_mongo_collecti
         print("[INFO] Drop Mongo collections")
         mongo_manager.drop_mongo_collections(bdd = "datalake", collections= ["gas_stations_infos", "gas_stations_price_logs_eur"])
     start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "datalake", collection= "gas_stations_prices")
-    extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
+    extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
     result = transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
     if result == None:
         return "done"
@@ -31,17 +31,19 @@ def launch_etl_gas_stations_oils_prices(year_to_load = None, drop_mongo_collecti
     return "done"
 
 
-def extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
-    print("[INFO] Start extract_new_gas_stations_oil_prices")
+def extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
+    print("[INFO] Start extract_api_gas_stations_oils_prices")
     start_year = start_date_to_load.year
     end_year = end_date_to_load.year
     years_to_load = list(range(start_year, end_year + 1))
     # years_to_load = ["2007", "2008"]
 
     # clean working xml/csv folders and recreate it
-    if os.path.exists("outputs/stations_prices_source"):
-        shutil.rmtree("outputs/stations_prices_source")
+    if os.path.exists("outputs/stations_prices_source/xml"):
+        shutil.rmtree("outputs/stations_prices_source/xml")
     os.makedirs("outputs/stations_prices_source/xml", exist_ok=True)
+    if os.path.exists("outputs/stations_prices_source/csv"):
+        shutil.rmtree("outputs/stations_prices_source/csv")
     os.makedirs("outputs/stations_prices_source/csv", exist_ok=True)
 
     # Loading targeting datas
@@ -126,10 +128,10 @@ def extract_new_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
 def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
     print("[INFO] Start transform_gas_stations_oils_prices")
 
-    # clean working csv folder and recreate it
-    if os.path.exists("outputs/stations_prices_transformed"):
-        shutil.rmtree("outputs/stations_prices_transformed")
-    os.makedirs("outputs/stations_prices_transformed", exist_ok=True)
+    # clean working folder and recreate it
+    if os.path.exists("outputs/stations_prices_source/transformed"):
+        shutil.rmtree("outputs/stations_prices_source/transformed")
+    os.makedirs("outputs/stations_prices_source/transformed", exist_ok=True)
 
     files_names = os.listdir("outputs/stations_prices_source/csv")
     print(files_names)
@@ -189,7 +191,7 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
             df_prices_transformed.columns = [col.capitalize() for col in df_prices_transformed.columns]
 
             # Save df to csv
-            df_prices_transformed.to_csv(f"outputs/stations_prices_transformed/stations_prices_transformed_{year}.csv", index=False)
+            df_prices_transformed.to_csv(f"outputs/stations_prices_source/transformed/stations_prices_transformed_{year}.csv", index=False)
             print(df_prices_transformed.head(5))
             print("END LOAD", year)
     print("END LOAD", files_names)
@@ -206,11 +208,11 @@ def load_gas_stations_oils_prices_to_mongo():
         shutil.rmtree("outputs/stations_prices")
     os.makedirs("outputs/stations_prices", exist_ok=True)
 
-    files_names = os.listdir("outputs/stations_prices_transformed")
+    files_names = os.listdir("outputs/stations_prices_source/transformed")
     print(files_names)
     for file_name in files_names:
         print("Load", file_name)
-        file_path = f"outputs/stations_prices_transformed/{file_name}"
+        file_path = f"outputs/stations_prices_source/transformed/{file_name}"
         year = file_name.split("_")[-1].split(".")[0]
         if not os.path.exists(file_path):
             print(f"{file_path} file not exist.")

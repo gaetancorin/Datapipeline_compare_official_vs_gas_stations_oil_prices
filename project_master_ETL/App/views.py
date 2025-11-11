@@ -71,6 +71,22 @@ def api_launch_etl_gas_stations_oil_prices():
         lockfile.release_lock(fd, lockfile_name)
 
 
+@app.route('/etl/launch_etl_denormalize_station_prices', methods=["POST"])
+def api_launch_etl_denormalize_station_prices():
+    lockfile_name = './LOCKFILE_launch_etl_denormalize_station_prices.lock'
+    fd = lockfile.acquire_lock(lockfile_name)
+    if fd is None:
+        print(f"Job is already running. Skipping execution at {datetime.now()}")
+        return {'message': 'Job already running'}, 200
+    try:
+        year_to_load = request.form.get('year_to_load')
+        drop_mongo_collections = request.form.get('drop_mongo_collections')
+        denorm_station_prices.launch_etl_denormalize_station_prices(year_to_load, drop_mongo_collections)
+        return "done"
+    finally:
+        lockfile.release_lock(fd, lockfile_name)
+
+
 @app.route('/etl/launch_etl_denormalize_official_oils_prices', methods=["POST"])
 def api_launch_etl_denormalize_official_oils_prices():
     lockfile_name = './LOCKFILE_launch_etl_denormalize_official_oils_prices.lock'
@@ -88,23 +104,7 @@ def api_launch_etl_denormalize_official_oils_prices():
         lockfile.release_lock(fd, lockfile_name)
 
 
-@app.route('/dataviz/launch_etl_denormalize_station_prices', methods=["POST"])
-def api_launch_etl_denormalize_station_prices():
-    lockfile_name = './LOCKFILE_launch_etl_denormalize_station_prices.lock'
-    fd = lockfile.acquire_lock(lockfile_name)
-    if fd is None:
-        print(f"Job is already running. Skipping execution at {datetime.now()}")
-        return {'message': 'Job already running'}, 200
-    try:
-        year_to_load = request.form.get('year_to_load')
-        drop_mongo_collections = request.form.get('drop_mongo_collections')
-        denorm_station_prices.launch_etl_denormalize_station_prices(year_to_load, drop_mongo_collections)
-        return "done"
-    finally:
-        lockfile.release_lock(fd, lockfile_name)
-
-
-@app.route('/dataviz/merge_denorm_station_vs_official_prices', methods=["POST"])
+@app.route('/etl/merge_denorm_station_vs_official_prices', methods=["POST"])
 def api_merge_denorm_station_vs_official_prices():
     lockfile_name = './LOCKFILE_merge_denorm_station_vs_official_prices.lock'
     fd = lockfile.acquire_lock(lockfile_name)

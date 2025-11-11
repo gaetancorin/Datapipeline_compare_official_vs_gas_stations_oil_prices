@@ -3,25 +3,26 @@ Architecture APIs et Fonctions:
 /etl/launch_complete_pipeline_oils_prices
     /etl/launch_etl_gas_stations_oils_prices
         determine_dates_to_load_from_mongo()
-        extract_new_gas_stations_oils_prices()
+        extract_api_gas_stations_oils_prices()
         transform_gas_stations_oils_prices()
         load_gas_stations_oils_prices_to_mongo()
-    /etl/launch_etl_official_oils_prices
+    /etl/launch_etl_denormalize_station_prices
         determine_dates_to_load_from_mongo()
-        extract_new_official_oils_prices()
-        transform_official_oils_prices()
-        load_official_oils_prices_to_mongo()
-    /dataviz/denormalize_station_prices_for_dataviz
-        determine_dates_to_load_from_mongo()
-        extract_new_station_prices_from_mongo()
+        extract_station_prices_from_mongo()
         transform_and_denormalize_station_prices()
-        load_denormalized_station_prices()
-    /dataviz/merge_denorm_station_vs_official_prices
+        load_denormalized_station_prices_to_mongo()
+    /etl/launch_etl_denormalize_official_oils_prices
         determine_dates_to_load_from_mongo()
-        extract_new_denorm_station_prices_from_mongo()
-        extract_new_official_oils_prices_from_mongo()
+        extract_api_denorm_official_oils_prices()
+        transform_denorm_official_oils_prices()
+        load_denorm_official_oils_prices_to_mongo()
+    /etl/merge_denorm_station_vs_official_prices
+        determine_dates_to_load_from_mongo()
+        extract_denorm_station_prices_from_mongo()
+        extract_official_oils_prices_from_mongo()
         transform_merge_station_vs_official_prices()
-        load_denorm_station_vs_official_prices()
+        load_denorm_station_vs_official_prices_to_mongo()
+/mongo/list_all_mongo_collections
 /mongo/drop_one_collection
 /mongo/drop_one_bdd
 /utils/save_mongo_dump_to_S3

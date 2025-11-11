@@ -32,7 +32,7 @@ def launch_etl_denormalize_station_prices(year_to_load = None, drop_mongo_collec
             print(f"[WARNING] No found data in 'gas_stations_prices' collection  between {start_date} et {end_date}")
         else:
             df_denorm_station_prices = transform_and_denormalize_station_prices(df_stations_price_logs)
-            load_denormalized_station_prices(df_denorm_station_prices)
+            load_denormalized_station_prices_to_mongo(df_denorm_station_prices)
         current_year_to_load = current_year_to_load + pd.DateOffset(years=1)
     return "done"
 
@@ -83,7 +83,7 @@ def transform_and_denormalize_station_prices(df_stations_prices):
     return df_denorm_station_prices
 
 
-def load_denormalized_station_prices(df_denorm_station_prices):
+def load_denormalized_station_prices_to_mongo(df_denorm_station_prices):
     print("[INFO] Start load_denorm_station_prices")
 
     # Save df to csv

@@ -13,19 +13,19 @@ def merge_denorm_station_vs_official_prices(year_to_load = None, drop_mongo_coll
         print("[INFO] Drop Mongo collections")
         mongo_manager.drop_mongo_collections(bdd = "denormalization", collections= ["denorm_station_vs_official_prices"])
     start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "denormalization", collection= "denorm_station_vs_official_prices")
-    df_denorm_station = extract_new_denorm_station_prices_from_mongo(start_date_to_load, end_date_to_load)
+    df_denorm_station = extract_denorm_station_prices_from_mongo(start_date_to_load, end_date_to_load)
     if df_denorm_station.empty:
         return None
-    df_official_oils = extract_new_official_oils_prices_from_mongo(start_date_to_load, end_date_to_load)
+    df_official_oils = extract_official_oils_prices_from_mongo(start_date_to_load, end_date_to_load)
     if df_official_oils.empty:
         return None
     denorm_station_vs_official_prices = transform_merge_station_vs_official_prices(df_denorm_station, df_official_oils)
-    load_denorm_station_vs_official_prices(denorm_station_vs_official_prices)
+    load_denorm_station_vs_official_prices_to_mongo(denorm_station_vs_official_prices)
     return "done"
 
 
-def extract_new_denorm_station_prices_from_mongo(start_date_to_load, end_date_to_load):
-    print("[INFO] Start extract_new_denorm_station_prices_from_mongo")
+def extract_denorm_station_prices_from_mongo(start_date_to_load, end_date_to_load):
+    print("[INFO] Start extract_denorm_station_prices_from_mongo")
 
     # clean working csv folder and recreate it
     if os.path.exists("outputs/denorm_station_vs_official_prices"):
@@ -46,8 +46,8 @@ def extract_new_denorm_station_prices_from_mongo(start_date_to_load, end_date_to
     return df_denorm_station
 
 
-def extract_new_official_oils_prices_from_mongo(start_date_to_load, end_date_to_load):
-    print("[INFO] Start extract_new_official_oils_prices_from_mongo")
+def extract_official_oils_prices_from_mongo(start_date_to_load, end_date_to_load):
+    print("[INFO] Start extract_official_oils_prices_from_mongo")
 
     df_official_oils = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="denormalization", collection="denorm_official_prices")
     if df_official_oils.empty:
@@ -80,8 +80,8 @@ def transform_merge_station_vs_official_prices(df_denorm_station, df_official_oi
     return df_merge
 
 
-def load_denorm_station_vs_official_prices(denorm_station_vs_official_prices):
-    print("[INFO] Start load_denorm_station_vs_official_prices")
+def load_denorm_station_vs_official_prices_to_mongo(denorm_station_vs_official_prices):
+    print("[INFO] Start load_denorm_station_vs_official_prices_to_mongo")
 
     # Save df to csv
     start_year = denorm_station_vs_official_prices['Date'].min().year
@@ -91,7 +91,7 @@ def load_denorm_station_vs_official_prices(denorm_station_vs_official_prices):
     # Save df to Mongo
     result = mongo_manager.load_datas_to_mongo(denorm_station_vs_official_prices, bdd="denormalization",collection="denorm_station_vs_official_prices", index=["Date"])
     if result:
-        print(f"correctly loaded denorm_station_vs_official_prices_{start_year}_{end_year} on mongo collection 'denormalization'")
+        print(f"correctly loaded denorm_station_vs_official_prices_{start_year}_{end_year} on mongo collection 'denorm_station_vs_official_prices'")
 
     print(f"END LOAD denorm_station_vs_official_prices_{start_year}_{end_year}")
     return "done"
