@@ -5,9 +5,9 @@ from datetime import datetime
 import logging
 import App.lockfile as lockfile
 import App.stations_oils_prices.gas_stations_prices as gas_stations_prices
-import App.stations_oils_prices.denormalize_station_prices as denorm_station_prices
+import App.stations_oils_prices.denormalize_stations_prices as denorm_stations_prices
 import App.official_oils_prices.denormalize_official_prices as denorm_official_prices
-import App.denorm_station_vs_official_prices as denorm_station_vs_official_prices
+import App.denorm_stations_vs_official_prices as denorm_stations_vs_official_prices
 import App.utils as utils
 import App.S3_manager as S3_manager
 import App.mongo_manager as mongo_manager
@@ -25,10 +25,10 @@ def api_is_alive():
 
 
 # Scheduler runs daily at 10:00 French local time (12:00 French local time when running inside Docker).
-@scheduler.task('cron', id='complete_pipeline_oil_prices',year='*', month='*', day='*', week='*', day_of_week='*', hour='10', minute='0', second='0')
-@app.route('/etl/launch_complete_pipeline_oil_prices', methods=["POST"])
-def api_launch_complete_pipeline_oil_prices():
-    lockfile_name = './LOCKFILE_launch_complete_pipeline_oil_prices.lock'
+@scheduler.task('cron', id='complete_pipeline_oils_prices',year='*', month='*', day='*', week='*', day_of_week='*', hour='10', minute='0', second='0')
+@app.route('/etl/launch_complete_pipeline_oils_prices', methods=["POST"])
+def api_launch_complete_pipeline_oils_prices():
+    lockfile_name = './LOCKFILE_launch_complete_pipeline_oils_prices.lock'
     fd = lockfile.acquire_lock(lockfile_name)
     if fd is None:
         print(f"Job is already running. Skipping execution at {datetime.now()}")
@@ -44,19 +44,19 @@ def api_launch_complete_pipeline_oil_prices():
             drop_mongo_collections = None
 
         gas_stations_prices.launch_etl_gas_stations_oils_prices(year_to_load, drop_mongo_collections)
-        denorm_station_prices.launch_etl_denormalize_station_prices(year_to_load, drop_mongo_collections)
+        denorm_stations_prices.launch_etl_denormalize_stations_prices(year_to_load, drop_mongo_collections)
 
         denorm_official_prices.launch_etl_denormalize_official_oils_prices(year_to_load, drop_mongo_collections)
 
-        denorm_station_vs_official_prices.merge_denorm_station_vs_official_prices(year_to_load, drop_mongo_collections)
+        denorm_stations_vs_official_prices.merge_denorm_stations_vs_official_prices(year_to_load, drop_mongo_collections)
         return 'done'
     finally:
         lockfile.release_lock(fd, lockfile_name)
 
 
-@app.route('/etl/launch_etl_gas_stations_oil_prices', methods=["POST"])
-def api_launch_etl_gas_stations_oil_prices():
-    lockfile_name = './LOCKFILE_launch_etl_gas_stations_oil_prices.lock'
+@app.route('/etl/launch_etl_gas_stations_oils_prices', methods=["POST"])
+def api_launch_etl_gas_stations_oils_prices():
+    lockfile_name = './LOCKFILE_launch_etl_gas_stations_oils_prices.lock'
     fd = lockfile.acquire_lock(lockfile_name)
     if fd is None:
         print(f"Job is already running. Skipping execution at {datetime.now()}")
@@ -71,9 +71,9 @@ def api_launch_etl_gas_stations_oil_prices():
         lockfile.release_lock(fd, lockfile_name)
 
 
-@app.route('/etl/launch_etl_denormalize_station_prices', methods=["POST"])
-def api_launch_etl_denormalize_station_prices():
-    lockfile_name = './LOCKFILE_launch_etl_denormalize_station_prices.lock'
+@app.route('/etl/launch_etl_denormalize_stations_prices', methods=["POST"])
+def api_launch_etl_denormalize_stations_prices():
+    lockfile_name = './LOCKFILE_launch_etl_denormalize_stations_prices.lock'
     fd = lockfile.acquire_lock(lockfile_name)
     if fd is None:
         print(f"Job is already running. Skipping execution at {datetime.now()}")
@@ -81,7 +81,7 @@ def api_launch_etl_denormalize_station_prices():
     try:
         year_to_load = request.form.get('year_to_load')
         drop_mongo_collections = request.form.get('drop_mongo_collections')
-        denorm_station_prices.launch_etl_denormalize_station_prices(year_to_load, drop_mongo_collections)
+        denorm_stations_prices.launch_etl_denormalize_stations_prices(year_to_load, drop_mongo_collections)
         return "done"
     finally:
         lockfile.release_lock(fd, lockfile_name)
@@ -97,16 +97,15 @@ def api_launch_etl_denormalize_official_oils_prices():
     try:
         year_to_load = request.form.get('year_to_load')
         drop_mongo_collections = request.form.get('drop_mongo_collections')
-
         denorm_official_prices.launch_etl_denormalize_official_oils_prices(year_to_load, drop_mongo_collections)
         return "done"
     finally:
         lockfile.release_lock(fd, lockfile_name)
 
 
-@app.route('/etl/merge_denorm_station_vs_official_prices', methods=["POST"])
-def api_merge_denorm_station_vs_official_prices():
-    lockfile_name = './LOCKFILE_merge_denorm_station_vs_official_prices.lock'
+@app.route('/etl/merge_denorm_stations_vs_official_prices', methods=["POST"])
+def api_merge_denorm_stations_vs_official_prices():
+    lockfile_name = './LOCKFILE_merge_denorm_stations_vs_official_prices.lock'
     fd = lockfile.acquire_lock(lockfile_name)
     if fd is None:
         print(f"Job is already running. Skipping execution at {datetime.now()}")
@@ -114,7 +113,7 @@ def api_merge_denorm_station_vs_official_prices():
     try:
         year_to_load = request.form.get('year_to_load')
         drop_mongo_collections = request.form.get('drop_mongo_collections')
-        denorm_station_vs_official_prices.merge_denorm_station_vs_official_prices(year_to_load, drop_mongo_collections)
+        denorm_stations_vs_official_prices.merge_denorm_stations_vs_official_prices(year_to_load, drop_mongo_collections)
         return "done"
     finally:
         lockfile.release_lock(fd, lockfile_name)

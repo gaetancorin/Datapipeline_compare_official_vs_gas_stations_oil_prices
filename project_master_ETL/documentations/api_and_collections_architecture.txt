@@ -6,22 +6,22 @@ Architecture APIs et Fonctions:
         extract_api_gas_stations_oils_prices()
         transform_gas_stations_oils_prices()
         load_gas_stations_oils_prices_to_mongo()
-    /etl/launch_etl_denormalize_station_prices
+    /etl/launch_etl_denormalize_stations_prices
         determine_dates_to_load_from_mongo()
-        extract_station_prices_from_mongo()
-        transform_and_denormalize_station_prices()
-        load_denormalized_station_prices_to_mongo()
+        extract_stations_prices_from_mongo()
+        transform_and_denormalize_stations_prices()
+        load_denormalized_stations_prices_to_mongo()
     /etl/launch_etl_denormalize_official_oils_prices
         determine_dates_to_load_from_mongo()
         extract_api_denorm_official_oils_prices()
         transform_denorm_official_oils_prices()
         load_denorm_official_oils_prices_to_mongo()
-    /etl/merge_denorm_station_vs_official_prices
+    /etl/merge_denorm_stations_vs_official_prices
         determine_dates_to_load_from_mongo()
-        extract_denorm_station_prices_from_mongo()
+        extract_denorm_stations_prices_from_mongo()
         extract_official_oils_prices_from_mongo()
-        transform_merge_station_vs_official_prices()
-        load_denorm_station_vs_official_prices_to_mongo()
+        transform_merge_stations_vs_official_prices()
+        load_denorm_stations_vs_official_prices_to_mongo()
 /mongo/list_all_mongo_collections
 /mongo/drop_one_collection
 /mongo/drop_one_bdd
@@ -36,19 +36,18 @@ databases_names:
 
 datalake:
     gas_stations_infos
-    gas_stations_price_logs_eur
-    official_oils_prices
+    gas_stations_prices
 denormalization:
-    denorm_station_prices
+    denorm_stations_prices
+    denorm_official_prices
     denorm_station_vs_official_prices
 
 
 COUNT (if loaded 2007 to 2025):
-39 513 801 elements in gas_stations_price_logs_eur
+39 513 801 elements in gas_stations_prices
 13 660 elements in gas_stations_infos
-2 112 elements in official_oils_prices
-
-6 749 elements in denorm_station_prices
+6 749 elements in denorm_stations_prices
+2 112 elements in denorm_official_prices
 7 897 elements in denorm_station_vs_official_prices
 
 ALL loading: 1h25

@@ -36,7 +36,7 @@
 			"response": []
 		},
 		{
-			"name": "/etl/launch_complete_pipeline_oil_prices",
+			"name": "/etl/launch_complete_pipeline_oils_prices",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -45,7 +45,7 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2020",
+							"value": "2018",
 							"type": "text"
 						},
 						{
@@ -56,7 +56,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/etl/launch_complete_pipeline_oil_prices",
+					"raw": "http://127.0.0.1:5000/etl/launch_complete_pipeline_oils_prices",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -67,14 +67,14 @@
 					"port": "5000",
 					"path": [
 						"etl",
-						"launch_complete_pipeline_oil_prices"
+						"launch_complete_pipeline_oils_prices"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/etl/launch_etl_gas_stations_oil_prices",
+			"name": "/etl/launch_etl_gas_stations_oils_prices",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -83,19 +83,18 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2008",
+							"value": "2021",
 							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/etl/launch_etl_gas_stations_oil_prices",
+					"raw": "http://127.0.0.1:5000/etl/launch_etl_gas_stations_oils_prices",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -106,14 +105,14 @@
 					"port": "5000",
 					"path": [
 						"etl",
-						"launch_etl_gas_stations_oil_prices"
+						"launch_etl_gas_stations_oils_prices"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/etl/launch_etl_official_oil_prices",
+			"name": "/etl/launch_etl_denormalize_stations_prices",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -122,7 +121,7 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2009",
+							"value": "2021",
 							"type": "text"
 						},
 						{
@@ -133,7 +132,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/etl/launch_etl_official_oils_prices",
+					"raw": "http://127.0.0.1:5000/etl/launch_etl_denormalize_stations_prices",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -144,14 +143,14 @@
 					"port": "5000",
 					"path": [
 						"etl",
-						"launch_etl_official_oils_prices"
+						"launch_etl_denormalize_stations_prices"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/dataviz/denormalize_station_prices_for_dataviz",
+			"name": "/etl/launch_etl_denormalize_official_oils_prices",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -160,20 +159,18 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2007",
-							"type": "text",
-							"disabled": true
+							"value": "2024",
+							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/dataviz/denormalize_station_prices_for_dataviz",
+					"raw": "http://127.0.0.1:5000/etl/launch_etl_denormalize_official_oils_prices",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -183,15 +180,15 @@
 					],
 					"port": "5000",
 					"path": [
-						"dataviz",
-						"denormalize_station_prices_for_dataviz"
+						"etl",
+						"launch_etl_denormalize_official_oils_prices"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/dataviz/merge_denorm_station_vs_official_prices",
+			"name": "/etl/merge_denorm_stations_vs_official_prices",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -200,20 +197,19 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2010",
+							"value": "2021",
 							"type": "text",
 							"disabled": true
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text",
-							"disabled": true
+							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://127.0.0.1:5000/dataviz/merge_denorm_station_vs_official_prices",
+					"raw": "http://127.0.0.1:5000/etl/merge_denorm_stations_vs_official_prices",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -223,8 +219,8 @@
 					],
 					"port": "5000",
 					"path": [
-						"dataviz",
-						"merge_denorm_station_vs_official_prices"
+						"etl",
+						"merge_denorm_stations_vs_official_prices"
 					]
 				}
 			},

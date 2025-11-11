@@ -123,11 +123,11 @@ This API allows to list all mongo databases name and collections name inside Mon
 {
   "datalake": [
     "gas_stations_infos",
-    "gas_stations_price_logs_eur",
-    "official_oils_prices"
+    "gas_stations_prices",
   ],
   "denormalization": [
     "denorm_station_prices",
+    "denorm_official_prices",
     "denorm_station_vs_official_prices"
   ]
 }

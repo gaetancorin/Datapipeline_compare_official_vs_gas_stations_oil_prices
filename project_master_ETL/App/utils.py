@@ -19,9 +19,9 @@ def determine_dates_to_load_from_mongo(year_to_load, db_name, collection):
             start_date_to_load = pd.to_datetime(last_date_in_datas) + pd.Timedelta(days=1)
         else:
             print(f"[INFO] Not row in collection {collection}, so load all the data")
-            if collection == "gas_stations_price_logs_eur" or collection == "denorm_station_prices":
+            if collection == "gas_stations_prices" or collection == "denorm_stations_prices":
                 start_date_to_load = pd.to_datetime("2007-01-01")
-            elif collection == "official_oils_prices" or collection == "denorm_station_vs_official_prices":
+            elif collection == "denorm_official_prices" or collection == "denorm_station_vs_official_prices":
                 start_date_to_load = pd.to_datetime("1985-01-01")
         end_date_to_load = pd.Timestamp.today().normalize()
         print(f"[INFO] start_date_to_load= {start_date_to_load}, end_date_to_load= {end_date_to_load}")

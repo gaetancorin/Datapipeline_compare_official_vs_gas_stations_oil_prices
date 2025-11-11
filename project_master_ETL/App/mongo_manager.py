@@ -79,7 +79,7 @@ def update_gas_stations_infos(gas_stations_infos, db_name, collection):
     records_to_insert = [r for r in records if r["Id_station_essence"] not in existing_ids]
     if records_to_insert:
         collection_mongo.insert_many(records_to_insert)
-    print("correctly update gas_station_infos datas to MongoDB")
+    print("correctly update gas_stations_infos datas to MongoDB")
 
 
 def load_datas_to_mongo(df, bdd, collection, index=None):
