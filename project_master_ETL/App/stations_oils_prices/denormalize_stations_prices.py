@@ -11,7 +11,7 @@ def launch_etl_denormalize_stations_prices(year_to_load = None, drop_mongo_colle
         return "done"
     if drop_mongo_collections == "true":
         print("[INFO] Drop Mongo collections")
-        mongo_manager.drop_mongo_collections(bdd = "denormalization", collections= ["denorm_stations_prices"])
+        mongo_manager.drop_mongo_collections(db_name = "denormalization", collections= ["denorm_stations_prices"])
 
     # clean working csv folder and recreate it
     if os.path.exists("outputs/denorm_stations_prices"):
@@ -20,12 +20,16 @@ def launch_etl_denormalize_stations_prices(year_to_load = None, drop_mongo_colle
 
     start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "denormalization", collection= "denorm_stations_prices")
 
-    current_year_to_load = start_date_to_load
-    while current_year_to_load < end_date_to_load:
-        start_date = current_year_to_load
-        end_date = current_year_to_load + pd.DateOffset(years=1)
-        if end_date >= end_date_to_load:
-            end_date = end_date_to_load
+    start_year = start_date_to_load.year
+    end_year = end_date_to_load.year
+    years_to_load = list(range(start_year, end_year + 1))  # range exclude stop year
+    # List of all years to process, e.g., [2007, 2008, 2009]
+
+    for year in years_to_load:
+        # iterate year but ensure to not go before start_date_to_load or after end_date_to_load
+        start_date = max(pd.Timestamp(day=1, month=1, year=year), start_date_to_load)
+        end_date = min(pd.Timestamp(day=31, month=12, year=year), end_date_to_load)
+
         print(f"[INFO] Start denormalize stations prices for year {start_date.year}")
         df_stations_prices = extract_stations_prices_from_mongo(start_date, end_date)
         if df_stations_prices.empty:
@@ -33,13 +37,12 @@ def launch_etl_denormalize_stations_prices(year_to_load = None, drop_mongo_colle
         else:
             df_denorm_stations_prices = transform_and_denormalize_stations_prices(df_stations_prices)
             load_denormalized_stations_prices_to_mongo(df_denorm_stations_prices)
-        current_year_to_load = current_year_to_load + pd.DateOffset(years=1)
     return "done"
 
 
 def extract_stations_prices_from_mongo(start_date_to_load, end_date_to_load):
     print("[INFO] Start extract_stations_prices_from_mongo")
-    df_stations_prices = mongo_manager.get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name="datalake", collection="gas_stations_prices")
+    df_stations_prices = mongo_manager.get_datas_by_date_from_one_collection(start_date_to_load, end_date_to_load, db_name="datalake", collection="gas_stations_prices")
     if df_stations_prices.empty:
         print(f"[WARNING] No existing datas on gas_stations_prices for Date {start_date_to_load} to {end_date_to_load}")
         return df_stations_prices
@@ -52,8 +55,7 @@ def extract_stations_prices_from_mongo(start_date_to_load, end_date_to_load):
 def transform_and_denormalize_stations_prices(df_stations_prices):
     print("[INFO] Start transform_and_denormalize_stations_prices")
 
-    print('reduce df by keeping only last datas by days, oils and stations')
-    # keep only last value of each day and each oil for each station to reduce datas
+    # Reduce df by keeping for each day only one value by station and oil type (the last data of the day)
     df_stations_prices['Heuremin'] = pd.to_datetime(df_stations_prices['Heuremin'], format='%H:%M',errors='coerce')
     df_stations_prices = df_stations_prices.sort_values(by=['Id_station_essence', 'Date', 'Nom', 'Heuremin'])
     df_stations_prices = df_stations_prices.groupby(['Id_station_essence', 'Date', 'Nom'], as_index=False).last()
@@ -65,10 +67,11 @@ def transform_and_denormalize_stations_prices(df_stations_prices):
     })
     df_denorm_stations_prices['Date'] = pd.to_datetime(df_denorm_stations_prices['Date'])
 
-    # Combine the gas stations prices when same date and same gas name (by mean)
+    # Compute the average price per oil type per day across all stations
+    # This ensures only one price per day and gas type
     df_denorm_stations_prices = df_denorm_stations_prices.groupby(['Date', 'Gas_name'], as_index=False)['Gas_eur_liter'].mean().round(5)
 
-    # Create col for each gas_name (pivot rotate df)
+    # Create col for each oil type (pivot rotate df)
     df_denorm_stations_prices = df_denorm_stations_prices.pivot(index='Date', columns='Gas_name', values='Gas_eur_liter')
     df_denorm_stations_prices = df_denorm_stations_prices.rename(
         columns=lambda x: f"station_ttc_{x.upper()}_eur_liter").reset_index()
@@ -88,12 +91,11 @@ def transform_and_denormalize_stations_prices(df_stations_prices):
             df_denorm_stations_prices[col] = float('nan')
 
     print("df_denorm_stations_prices\n", df_denorm_stations_prices.head())
-
     return df_denorm_stations_prices
 
 
 def load_denormalized_stations_prices_to_mongo(df_denorm_stations_prices):
-    print("[INFO] Start load_denorm_stations_prices")
+    print("[INFO] Start load_denormalized_stations_prices_to_mongo")
 
     # Save df to csv
     start_year = df_denorm_stations_prices['Date'].min().year
@@ -101,7 +103,7 @@ def load_denormalized_stations_prices_to_mongo(df_denorm_stations_prices):
     df_denorm_stations_prices.to_csv(f"outputs/denorm_stations_prices/denorm_stations_prices_{start_year}_{end_year}.csv", index=False)
 
     # Save df to Mongo
-    result = mongo_manager.load_datas_to_mongo(df_denorm_stations_prices, bdd="denormalization",collection="denorm_stations_prices", index=["Date"])
+    result = mongo_manager.load_datas_to_mongo(df_denorm_stations_prices, db_name="denormalization",collection="denorm_stations_prices", index=["Date"])
     if result:
         print(f"correctly loaded denorm_stations_prices_{start_year}_{end_year} on mongo collection 'denormalization'")
 

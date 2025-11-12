@@ -21,7 +21,7 @@ def launch_etl_gas_stations_oils_prices(year_to_load = None, drop_mongo_collecti
         return "done"
     if drop_mongo_collections == "true":
         print("[INFO] Drop Mongo collections")
-        mongo_manager.drop_mongo_collections(bdd = "datalake", collections= ["gas_stations_infos", "gas_stations_prices"])
+        mongo_manager.drop_mongo_collections(db_name = "datalake", collections= ["gas_stations_infos", "gas_stations_prices"])
     start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "datalake", collection= "gas_stations_prices")
     extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
     result = transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load)
@@ -35,8 +35,8 @@ def extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
     print("[INFO] Start extract_api_gas_stations_oils_prices")
     start_year = start_date_to_load.year
     end_year = end_date_to_load.year
-    years_to_load = list(range(start_year, end_year + 1))
-    # years_to_load = ["2007", "2008"]
+    years_to_load = list(range(start_year, end_year + 1)) # range exclude stop year
+    # List of all years to process, e.g., [2007, 2008, 2009]
 
     # clean working xml/csv folders and recreate it
     if os.path.exists("outputs/stations_prices_source/xml"):
@@ -103,7 +103,7 @@ def extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
         df = df[df["cp"] != "35***"]
         df["cp"] = df["cp"].replace("", np.nan).astype(int)
 
-        # Standardize three different date formats into a single format ('%Y-%m-%d %H:%M:%S.%f')
+        # Standardize three different date formats into a single format: ('%Y_%m_%d_%H:%M')
         # (used between 2014 and now)
         df['maj_without_microsec_with_T'] = pd.to_datetime(df['maj'], format='%Y-%m-%dT%H:%M:%S',errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
         # (used between 2007 and 2013)
@@ -159,12 +159,13 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
                 return None
             print(df.head(5))
 
+            # Print type of oils available for this year
             print("stations_prices_source oils availables:\n", df["nom"].dropna().unique())
 
             print('clean df by standard deviation and z-score')
             # for each day and type of oil, define standard deviation
             df["z_score"] = df.groupby(["date", "nom"])["valeur"].transform(lambda x: zscore(x, ddof=0))
-            # delete all datas who have big standard deviation by z-score (abs change negatif value for positif)
+            # delete all datas who have big standard deviation by z-score ('abs' change negative value to positif)
             df_transformed = df[abs(df["z_score"]) < 1]
             df_transformed = df_transformed.drop(columns=["z_score"])
 
@@ -172,9 +173,8 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
             df_transformed = df_transformed.sort_values(by=['id', 'date', 'nom', 'heuremin'])
             df_transformed = df_transformed.groupby(['id', 'date', 'nom', 'heuremin'], as_index=False).last()
 
-            # change date and heuremin to str
+            # change date to str
             df_transformed["date"] = df_transformed["date"].dt.strftime('%Y_%m_%d')
-            # df_transformed["heuremin"] = df_transformed["heuremin"].dt.strftime('%H:%M')
 
             # rename id to id_station_essence
             df_transformed["id_station_essence"] = df_transformed["id"]
@@ -213,8 +213,9 @@ def load_gas_stations_oils_prices_to_mongo():
             print("rows =", len(df))
             df['Date'] = pd.to_datetime(df['Date'], format='%Y_%m_%d')
 
-            # Split data to stations_infos and stations_prices
-            # update stations_infos
+            # Split df to 'stations_infos' and 'stations_prices', and load it into Mongo
+
+            # STATIONS_INFOS
             df_stations_infos = df[['Id_station_essence', 'Adresse', 'Ville', 'Cp', 'Latitude', 'Longitude', 'Date']]
             # Keep the latest Date(most recent) by Sort 'Id_station_essence' and 'Date' and keep the last
             df_stations_infos = df_stations_infos.sort_values(['Id_station_essence','Date'], ascending=[True, True])
@@ -226,16 +227,15 @@ def load_gas_stations_oils_prices_to_mongo():
             # Save df to Mongo
             mongo_manager.update_gas_stations_infos(df_stations_infos, db_name= "datalake", collection= "gas_stations_infos")
 
-
-            # add stations_prices
+            # STATIONS_PRICES
             df_stations_prices = df[['Date', 'Id_station_essence', 'Nom', 'Valeur', 'Heuremin']]
             print('stations_prices \n', df_stations_prices.head(5))
             # Save df to csv
             df_stations_prices.to_csv(f"outputs/stations_prices/stations_prices_{year}.csv", index=False)
             # Save df to Mongo
-            result = mongo_manager.load_datas_to_mongo(df_stations_prices, bdd= "datalake", collection= "gas_stations_prices", index= ["Date", "Nom"])
+            result = mongo_manager.load_datas_to_mongo(df_stations_prices, db_name= "datalake", collection= "gas_stations_prices", index= ["Date", "Nom"])
             if result:
-                print("correctly loaded", file_name, "on mongo collection 'stations_prices'")
+                print("correctly loaded", file_name, "on mongo collection 'gas_stations_prices'")
 
         print("END LOAD", file_name)
     print("END LOAD", files_names)

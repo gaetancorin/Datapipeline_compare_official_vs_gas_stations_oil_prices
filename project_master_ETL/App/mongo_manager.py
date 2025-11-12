@@ -82,8 +82,8 @@ def update_gas_stations_infos(gas_stations_infos, db_name, collection):
     print("correctly update gas_stations_infos datas to MongoDB")
 
 
-def load_datas_to_mongo(df, bdd, collection, index=None):
-    db_mongo = client_mongo.get_database(bdd)
+def load_datas_to_mongo(df, db_name, collection, index=None):
+    db_mongo = client_mongo.get_database(db_name)
     collection_mongo = db_mongo.get_collection(collection)
 
     if index != None:
@@ -97,7 +97,7 @@ def load_datas_to_mongo(df, bdd, collection, index=None):
     return "done"
 
 
-def get_filtered_datas_from_one_collection(start_date_to_load, end_date_to_load, db_name, collection):
+def get_datas_by_date_from_one_collection(start_date_to_load, end_date_to_load, db_name, collection):
     db_mongo = client_mongo.get_database(db_name)
     if collection not in db_mongo.list_collection_names():
         print(f"[INFO] Collection '{collection}' not exist in mongo BDD '{db_name}'")
@@ -125,10 +125,10 @@ def drop_mongo_bdd(db_name):
     client_mongo.drop_database(db_name)
 
 
-def drop_mongo_collections(bdd, collections):
-    db_mongo = client_mongo.get_database(bdd)
+def drop_mongo_collections(db_name, collections):
+    db_mongo = client_mongo.get_database(db_name)
     for collection in collections:
-        print(f"[INFO] Into Mongo, drop '{collection.upper()}' collection in '{bdd.upper()}' bdd")
+        print(f"[INFO] Into Mongo, drop '{collection.upper()}' collection in '{db_name.upper()}' bdd")
         db_mongo.drop_collection(collection)
 
 def list_all_collections():

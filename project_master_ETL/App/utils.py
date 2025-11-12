@@ -6,6 +6,18 @@ import App.mongo_manager as mongo_manager
 import App.S3_manager as S3_manager
 
 def determine_dates_to_load_from_mongo(year_to_load, db_name, collection):
+    '''
+    Determine the START and END dates for loading data from MongoDB.
+    - If `year_to_load` is provided:
+        Load data for that year only (from Jan 1 to Dec 31, or up to today if in the future).
+    - If `year_to_load` is not provided:
+        Load only new data.
+        → If data exists in Mongo: start from the day after the last record.
+        → If empty: start from a default date representing the beginning of dataset
+        End date is always today.
+    Returns:
+        (pd.Timestamp, pd.Timestamp): start_date_to_load, end_date_to_load
+    '''
     if year_to_load:
         # Load only the target year
         print(f"[INFO] year_to_load received: {year_to_load}")
@@ -98,7 +110,7 @@ def compress_mongo_dump_to_zip(folder_to_zip, db_name):
     print(f"[INFO] Success zip the dump: {folder_to_zip}.zip")
     # Remove the uncompressed dump folder
     shutil.rmtree(folder_to_zip)
-    print(f"[INFO] Removed original uncompressed dump folder: {folder_to_zip}")
+    print(f"[INFO] Sucess removed original uncompressed dump folder: {folder_to_zip}")
     return folder_to_zip + ".zip"
 
 
