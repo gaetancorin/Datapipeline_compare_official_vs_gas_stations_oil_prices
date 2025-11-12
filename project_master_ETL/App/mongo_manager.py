@@ -54,17 +54,17 @@ def get_last_data_date_from_one_collection(db_name, collection):
 def update_gas_stations_infos(gas_stations_infos, db_name, collection):
     db_mongo = client_mongo.get_database(db_name)
     collection_mongo = db_mongo.get_collection(collection)
-    collection_mongo.create_index([("Id_station_essence", pymongo.ASCENDING), ("Cp", pymongo.ASCENDING)])
+    collection_mongo.create_index([("gas_station_id", pymongo.ASCENDING), ("postal_code", pymongo.ASCENDING)])
     records = gas_stations_infos.to_dict(orient="records")
 
-    # Replace gas_station_infos row only if "Id_station_essence" matches and row's Last_update is more recent than in Mongo.
+    # Replace gas_station_infos row only if "gas_station_id" matches and row's Last_update is more recent than in Mongo.
     operations = [
         ReplaceOne(
             {
-                "Id_station_essence": record["Id_station_essence"],
+                "gas_station_id": record["gas_station_id"],
                 "$or": [
-                    {"Derniere_maj": {"$lt": record["Derniere_maj"]}},
-                    {"Derniere_maj": {"$exists": False}}
+                    {"last_update": {"$lt": record["last_update"]}},
+                    {"last_update": {"$exists": False}}
                 ]
             },
             record,
@@ -74,9 +74,9 @@ def update_gas_stations_infos(gas_stations_infos, db_name, collection):
     ]
     collection_mongo.bulk_write(operations)
 
-    # If no matching "Id_station_essence exists", insert the row.
-    existing_ids = set(doc["Id_station_essence"] for doc in collection_mongo.find({}, {"Id_station_essence": 1}))
-    records_to_insert = [r for r in records if r["Id_station_essence"] not in existing_ids]
+    # If no matching "gas_station_id" exist, insert the row.
+    existing_ids = set(doc["gas_station_id"] for doc in collection_mongo.find({}, {"gas_station_id": 1}))
+    records_to_insert = [r for r in records if r["gas_station_id"] not in existing_ids]
     if records_to_insert:
         collection_mongo.insert_many(records_to_insert)
     print("correctly update gas_stations_infos datas to MongoDB")

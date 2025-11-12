@@ -92,31 +92,45 @@ def extract_api_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
                 data.append(row)
         df = pd.DataFrame(data)
 
+        df = df.rename(columns={
+            "id": "gas_station_id",
+            "latitude": "latitude",
+            "longitude": "longitude",
+            "cp": "postal_code",
+            "ville": "city",
+            "adresse": "address",
+            "nom": "oil_name",
+            "maj": "date_update",
+            "valeur": "oil_eur_liter"
+        })
+        df = df[["date_update", "gas_station_id", "oil_name", "oil_eur_liter", "address", 'city', "postal_code", "latitude", "longitude"]]
+
+
         ###### CLEAN DF AND ADD TYPES ##############
-        df["id"] = df["id"].astype(int)
+        df["gas_station_id"] = df["gas_station_id"].astype(int)
         df["latitude"] = df["latitude"].replace(["", "0"], np.nan).astype(float)
         df["longitude"] = df["longitude"].replace(["", "0"], np.nan).astype(float)
-        df['adresse'] = df['adresse'].str.replace("\n", " ", regex=True)
-        df["valeur"] = df["valeur"].astype(float)
+        df['address'] = df['address'].str.replace("\n", " ", regex=True)
+        df["oil_eur_liter"] = df["oil_eur_liter"].astype(float)
 
         # (The CP is '35***' for one of the entries from 2008, and its ID "35200004" doesn't match any station in other years, so we remove it.)
-        df = df[df["cp"] != "35***"]
-        df["cp"] = df["cp"].replace("", np.nan).astype(int)
+        df = df[df["postal_code"] != "35***"]
+        df["postal_code"] = df["postal_code"].replace("", np.nan).astype(int)
 
         # Standardize three different date formats into a single format: ('%Y_%m_%d_%H:%M')
         # (used between 2014 and now)
-        df['maj_without_microsec_with_T'] = pd.to_datetime(df['maj'], format='%Y-%m-%dT%H:%M:%S',errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
+        df['date_without_microsec_with_T'] = pd.to_datetime(df['date_update'], format='%Y-%m-%dT%H:%M:%S',errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
         # (used between 2007 and 2013)
-        df['maj_without_microsec'] = pd.to_datetime(df['maj'], format='%Y-%m-%d %H:%M:%S', errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
-        df['maj_with_microsec'] = pd.to_datetime(df['maj'], format='%Y-%m-%d %H:%M:%S.%f', errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
+        df['date_without_microsec'] = pd.to_datetime(df['date_update'], format='%Y-%m-%d %H:%M:%S', errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
+        df['date_with_microsec'] = pd.to_datetime(df['date_update'], format='%Y-%m-%d %H:%M:%S.%f', errors='coerce').dt.strftime('%Y_%m_%d_%H:%M')
         # merge into same columns and clean
-        df['maj'] = df['maj_with_microsec'].fillna(df['maj_without_microsec']).fillna(df['maj_without_microsec_with_T'])
-        df = df.drop(columns=["maj_without_microsec", "maj_with_microsec", "maj_without_microsec_with_T"])
+        df['date_update'] = df['date_with_microsec'].fillna(df['date_without_microsec']).fillna(df['date_without_microsec_with_T'])
+        df = df.drop(columns=["date_without_microsec", "date_with_microsec", "date_without_microsec_with_T"])
 
-        # Standardize the "valeur" column:
+        # Standardize the "oil_eur_liter" column:
         # - From 2022 to now, values are in the range 0.5 to 2.0
         # - From 2007 to 2021, values are in the range 500 to 2000 and must be scaled to match the new format
-        df['valeur'] = df['valeur'] / 1000 if int(year) < 2022 else df['valeur']
+        df['oil_eur_liter'] = df['oil_eur_liter'] / 1000 if int(year) < 2022 else df['oil_eur_liter']
 
         # Save df to csv
         df.to_csv(f"outputs/stations_prices_source/csv/stations_prices_source_{year}.csv", index=False)
@@ -147,10 +161,10 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
             print(df.head(5))
 
             # separate date to time
-            df['date'] = pd.to_datetime(df['maj'], format='%Y_%m_%d_%H:%M', errors='coerce').dt.strftime('%Y_%m_%d')
+            df['date'] = pd.to_datetime(df['date_update'], format='%Y_%m_%d_%H:%M', errors='coerce').dt.strftime('%Y_%m_%d')
             df["date"] = pd.to_datetime(df["date"], format="%Y_%m_%d")
-            df['heuremin'] = pd.to_datetime(df['maj'],format='%Y_%m_%d_%H:%M',errors='coerce').dt.strftime('%H:%M')
-            df = df.drop(columns=["maj"])
+            df['hour_min'] = pd.to_datetime(df['date_update'],format='%Y_%m_%d_%H:%M',errors='coerce').dt.strftime('%H:%M')
+            df = df.drop(columns=["date_update"])
 
             # reduce df by specific dates we want only
             df = df[(df['date'] >= start_date_to_load) & (df['date'] <= end_date_to_load)]
@@ -160,27 +174,22 @@ def transform_gas_stations_oils_prices(start_date_to_load, end_date_to_load):
             print(df.head(5))
 
             # Print type of oils available for this year
-            print("stations_prices_source oils availables:\n", df["nom"].dropna().unique())
+            print("stations_prices_source oils availables:\n", df["oil_name"].dropna().unique())
 
             print('clean df by standard deviation and z-score')
             # for each day and type of oil, define standard deviation
-            df["z_score"] = df.groupby(["date", "nom"])["valeur"].transform(lambda x: zscore(x, ddof=0))
+            df["z_score"] = df.groupby(["date", "oil_name"])["oil_eur_liter"].transform(lambda x: zscore(x, ddof=0))
             # delete all datas who have big standard deviation by z-score ('abs' change negative value to positif)
             df_transformed = df[abs(df["z_score"]) < 1]
             df_transformed = df_transformed.drop(columns=["z_score"])
 
             # Keep only one data per minute
-            df_transformed = df_transformed.sort_values(by=['id', 'date', 'nom', 'heuremin'])
-            df_transformed = df_transformed.groupby(['id', 'date', 'nom', 'heuremin'], as_index=False).last()
+            df_transformed = df_transformed.sort_values(by=['gas_station_id', 'date', 'oil_name', 'hour_min'])
+            df_transformed = df_transformed.groupby(['gas_station_id', 'date', 'oil_name', 'hour_min'], as_index=False).last()
 
             # change date to str
             df_transformed["date"] = df_transformed["date"].dt.strftime('%Y_%m_%d')
-
-            # rename id to id_station_essence
-            df_transformed["id_station_essence"] = df_transformed["id"]
-            df_transformed = df_transformed.drop(columns=["id"])
-
-            df_transformed.columns = [col.capitalize() for col in df_transformed.columns]
+            df_transformed = df_transformed.rename(columns={'date': 'Date'})
 
             # Save df to csv
             df_transformed.to_csv(f"outputs/stations_prices_source/transformed/stations_prices_transformed_{year}.csv", index=False)
@@ -216,11 +225,11 @@ def load_gas_stations_oils_prices_to_mongo():
             # Split df to 'stations_infos' and 'stations_prices', and load it into Mongo
 
             # STATIONS_INFOS
-            df_stations_infos = df[['Id_station_essence', 'Adresse', 'Ville', 'Cp', 'Latitude', 'Longitude', 'Date']]
-            # Keep the latest Date(most recent) by Sort 'Id_station_essence' and 'Date' and keep the last
-            df_stations_infos = df_stations_infos.sort_values(['Id_station_essence','Date'], ascending=[True, True])
-            df_stations_infos = df_stations_infos.drop_duplicates(subset=['Id_station_essence'], keep='last').reset_index(drop=True)
-            df_stations_infos = df_stations_infos.rename(columns={"Date": "Derniere_maj"})
+            df_stations_infos = df[['gas_station_id', 'address', 'city', 'postal_code', 'latitude', 'longitude', 'Date']]
+            # Keep the latest date update by Sort 'gas_station_id' and 'Date' and keep the last
+            df_stations_infos = df_stations_infos.sort_values(['gas_station_id','Date'], ascending=[True, True])
+            df_stations_infos = df_stations_infos.drop_duplicates(subset=['gas_station_id'], keep='last').reset_index(drop=True)
+            df_stations_infos = df_stations_infos.rename(columns={"Date": "last_update"})
             print('stations_infos \n', df_stations_infos.head(5))
             # Save df to csv
             df_stations_infos.to_csv(f"outputs/stations_infos/stations_infos_{year}.csv",index=False)
@@ -228,12 +237,12 @@ def load_gas_stations_oils_prices_to_mongo():
             mongo_manager.update_gas_stations_infos(df_stations_infos, db_name= "datalake", collection= "gas_stations_infos")
 
             # STATIONS_PRICES
-            df_stations_prices = df[['Date', 'Id_station_essence', 'Nom', 'Valeur', 'Heuremin']]
+            df_stations_prices = df[['Date', 'gas_station_id', 'oil_name', 'oil_eur_liter', 'hour_min']]
             print('stations_prices \n', df_stations_prices.head(5))
             # Save df to csv
             df_stations_prices.to_csv(f"outputs/stations_prices/stations_prices_{year}.csv", index=False)
             # Save df to Mongo
-            result = mongo_manager.load_datas_to_mongo(df_stations_prices, db_name= "datalake", collection= "gas_stations_prices", index= ["Date", "Nom"])
+            result = mongo_manager.load_datas_to_mongo(df_stations_prices, db_name= "datalake", collection= "gas_stations_prices", index= ["Date", "oil_name"])
             if result:
                 print("correctly loaded", file_name, "on mongo collection 'gas_stations_prices'")
 

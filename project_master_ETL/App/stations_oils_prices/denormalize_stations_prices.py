@@ -46,33 +46,30 @@ def extract_stations_prices_from_mongo(start_date_to_load, end_date_to_load):
     if df_stations_prices.empty:
         print(f"[WARNING] No existing datas on gas_stations_prices for Date {start_date_to_load} to {end_date_to_load}")
         return df_stations_prices
-    df_stations_prices = df_stations_prices[["Id_station_essence", "Date", "Nom", "Valeur", "Heuremin"]]
+    df_stations_prices = df_stations_prices[["gas_station_id", "Date", "oil_name", "oil_eur_liter", "hour_min"]]
 
     print(f"[INFO] Found {len(df_stations_prices)} rows into gas_stations_prices between {start_date_to_load} and {end_date_to_load}")
     return df_stations_prices
 
 
-def transform_and_denormalize_stations_prices(df_stations_prices):
+def transform_and_denormalize_stations_prices(df_denorm_stations_prices):
     print("[INFO] Start transform_and_denormalize_stations_prices")
 
     # Reduce df by keeping for each day only one value by station and oil type (the last data of the day)
-    df_stations_prices['Heuremin'] = pd.to_datetime(df_stations_prices['Heuremin'], format='%H:%M',errors='coerce')
-    df_stations_prices = df_stations_prices.sort_values(by=['Id_station_essence', 'Date', 'Nom', 'Heuremin'])
-    df_stations_prices = df_stations_prices.groupby(['Id_station_essence', 'Date', 'Nom'], as_index=False).last()
-    df_stations_prices = df_stations_prices.drop(columns=["Heuremin"])
+    df_denorm_stations_prices['hour_min'] = pd.to_datetime(df_denorm_stations_prices['hour_min'], format='%H:%M',errors='coerce')
+    df_denorm_stations_prices = df_denorm_stations_prices.sort_values(by=['gas_station_id', 'Date', 'oil_name', 'hour_min'])
+    df_denorm_stations_prices = df_denorm_stations_prices.groupby(['gas_station_id', 'Date', 'oil_name'], as_index=False).last()
+    df_denorm_stations_prices = df_denorm_stations_prices.drop(columns=["hour_min"])
 
 
-    df_denorm_stations_prices = df_stations_prices.rename(columns={
-        "Id_station_essence": "Gas_station_id", "Nom": "Gas_name", "Valeur": "Gas_eur_liter"
-    })
     df_denorm_stations_prices['Date'] = pd.to_datetime(df_denorm_stations_prices['Date'])
 
     # Compute the average price per oil type per day across all stations
     # This ensures only one price per day and gas type
-    df_denorm_stations_prices = df_denorm_stations_prices.groupby(['Date', 'Gas_name'], as_index=False)['Gas_eur_liter'].mean().round(5)
+    df_denorm_stations_prices = df_denorm_stations_prices.groupby(['Date', 'oil_name'], as_index=False)['oil_eur_liter'].mean().round(5)
 
     # Create col for each oil type (pivot rotate df)
-    df_denorm_stations_prices = df_denorm_stations_prices.pivot(index='Date', columns='Gas_name', values='Gas_eur_liter')
+    df_denorm_stations_prices = df_denorm_stations_prices.pivot(index='Date', columns='oil_name', values='oil_eur_liter')
     df_denorm_stations_prices = df_denorm_stations_prices.rename(
         columns=lambda x: f"station_ttc_{x.upper()}_eur_liter").reset_index()
     # print("df_denorm_stations_prices\n", df_denorm_stations_prices)
