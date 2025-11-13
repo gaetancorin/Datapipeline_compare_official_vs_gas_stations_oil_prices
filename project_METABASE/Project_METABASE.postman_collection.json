@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "678d6801-22a3-4d2d-98dd-07498cdaba9b",
-		"name": "Project_master_METABASE",
+		"name": "Project_METABASE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21985586"
 	},
@@ -163,7 +163,7 @@
 					"formdata": [
 						{
 							"key": "zip_name",
-							"value": "metabase_db/metabase.db_2025_06_27.zip",
+							"value": "metabase_db_example",
 							"type": "text"
 						}
 					]
@@ -185,6 +185,30 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

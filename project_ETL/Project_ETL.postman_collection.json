@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "2f579b26-e16e-4a3e-93b3-11d360ace4d4",
-		"name": "Project_master_ETL",
+		"name": "Project_ETL",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21985586"
 	},
@@ -45,13 +45,14 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2018",
+							"value": "2025",
 							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -83,13 +84,14 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2021",
+							"value": "2025",
 							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -121,13 +123,14 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2021",
+							"value": "2025",
 							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -159,13 +162,14 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2024",
+							"value": "2025",
 							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -197,14 +201,14 @@
 					"formdata": [
 						{
 							"key": "year_to_load",
-							"value": "2021",
-							"type": "text",
-							"disabled": true
+							"value": "2025",
+							"type": "text"
 						},
 						{
 							"key": "drop_mongo_collections",
 							"value": "true",
-							"type": "text"
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -266,12 +270,12 @@
 					"formdata": [
 						{
 							"key": "db_name",
-							"value": "datalake2",
+							"value": "datalake",
 							"type": "text"
 						},
 						{
 							"key": "collection_name",
-							"value": "official_oils_prices",
+							"value": "gas_stations_infos",
 							"type": "text"
 						}
 					]
@@ -304,7 +308,7 @@
 					"formdata": [
 						{
 							"key": "db_name",
-							"value": "datalake2",
+							"value": "datalake",
 							"type": "text"
 						}
 					]
@@ -405,7 +409,7 @@
 						},
 						{
 							"key": "new_bdd_name",
-							"value": "datalake_2",
+							"value": "datalake2",
 							"type": "text"
 						}
 					]
