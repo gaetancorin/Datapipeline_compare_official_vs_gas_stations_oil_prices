@@ -5,9 +5,9 @@ services:
     ports:
       - "3000:3000"
 
-  project_master_metabase:
+  project_metabase:
     build: .
-    container_name: project_master_metabase
+    container_name: project_metabase
     ports:
       - "5001:5001"
     volumes:

@@ -1,15 +1,15 @@
 -------------- DOCKER COMPOSE (FLASK + METABASE)---------------
 construire le docker compose:
-docker-compose -p project_metabase_tools up --build -d
+docker-compose -p project_metabase up --build -d
 
 redemarrer le docker compose:
-docker-compose -p project_metabase_tools start
+docker-compose -p project_metabase start
 
 arreter le docker compose:
-docker-compose -p project_metabase_tools stop
+docker-compose -p project_metabase stop
 
 supprimer le docker compose et docker associés:
-docker-compose -p project_metabase_tools down
+docker-compose -p project_metabase down
 
 
 ----------- docker METABASE (if only METABASE Docker)---------

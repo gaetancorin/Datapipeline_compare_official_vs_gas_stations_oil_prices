@@ -1,6 +1,5 @@
 **/.ipynb_checkpoints
 **/results/
-**/project_master_ETL/outputs/
 **/.env
 **/env.txt
 #**/test_dump_file_on_s3.ipynb
