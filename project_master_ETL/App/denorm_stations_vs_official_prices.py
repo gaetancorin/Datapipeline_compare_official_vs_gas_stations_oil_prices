@@ -73,11 +73,6 @@ def transform_merge_stations_vs_official_prices(df_denorm_stations, df_denorm_of
     # df_merge = pd.merge(df_official_oils, df_denorm_stations, on='Date', how='outer', indicator=True)
     df_merge.sort_values(by='Date', inplace=True)
 
-    # Need to create DIY filters because Metabase filters is not working fine (lot of bugs)
-    df_merge['Day_of_week'] = df_merge['Date'].dt.day_name()
-    df_merge['Month'] = df_merge['Date'].dt.month_name()
-    df_merge['Year'] = df_merge['Date'].dt.year.astype(str)
-    df_merge['DayMonth'] = df_merge['Date'].dt.day.astype(str) + df_merge['Date'].dt.month_name().str.lower()
     print("df_merge_stations_vs_official_prices\n", df_merge.head())
     return df_merge
 
