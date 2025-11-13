@@ -28,3 +28,18 @@ swap=0
 
 redemarrer wsl avec PowerShell: wsl --shutdown
 
+---- Activer / Desactiver authentification MongoDB ----
+aller sur:
+"C:\Program Files\MongoDB\Server\8.0\bin\mongod.cfg"
+
+- Activer l'authentification, ecrire:
+security:
+  authorization: "enabled"
+
+- Desactiver l'authentification, ecrire:
+security:
+  authorization: "disabled"
+
+relancer MongoDB dans le terminal Powershell Administrateur:
+net stop MongoDB
+net start MongoDB
