@@ -3,3 +3,6 @@
 **/.env
 **/env.txt
 #**/test_dump_file_on_s3.ipynb
+
+__pycache__/
+.idea/

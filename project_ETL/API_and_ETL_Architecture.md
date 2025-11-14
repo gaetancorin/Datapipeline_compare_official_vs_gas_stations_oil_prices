@@ -1,6 +1,6 @@
 # API and Functions Architecture
 
-## ETL APIs
+## ETL APIs and functions
 
 - /etl/launch_complete_pipeline_oils_prices
   - /etl/launch_etl_gas_stations_oils_prices
