@@ -44,10 +44,10 @@ def restore_metabase_db_from_S3(folder_path_S3_zipped):
         S3_manager.download_file_from_s3_to_path(folder_path_S3_zipped, out_path="outputs/restore_metabase_db")
         local_folder_name_zipped = os.path.basename(folder_path_S3_zipped)
         # dezip metabase_db
-        local_folder_path_dezipped, official_db_name = decompress_zip_to_outputs(local_folder_name_zipped, outputs_folder="outputs/restore_metabase_db")
-        os.rename(local_folder_path_dezipped, "outputs/restore_metabase_db/"+official_db_name)
+        local_folder_path_dezipped = decompress_zip_to_outputs(local_folder_name_zipped, outputs_folder="outputs/restore_metabase_db")
+        os.rename(local_folder_path_dezipped, "outputs/restore_metabase_db/metabase.db")
     # restore metabase_db
-    copy_local_metabase_db_to_docker("outputs/restore_metabase_db/"+official_db_name)
+    copy_local_metabase_db_to_docker("outputs/restore_metabase_db/metabase.db")
     stop_metabase()
     start_metabase()
     return "done"
@@ -61,8 +61,7 @@ def decompress_zip_to_outputs(zip_name, outputs_folder="outputs"):
     shutil.unpack_archive(zip_path, folder_path)
     # Remove the zip dump file
     os.remove(zip_path)
-    old_db_name = "_".join(zip_name.split("_")[:-3])
-    return folder_path, old_db_name
+    return folder_path
 
 
 def stop_metabase():

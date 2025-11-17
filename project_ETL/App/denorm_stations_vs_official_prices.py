@@ -11,7 +11,7 @@ def merge_denorm_stations_vs_official_prices(year_to_load = None, drop_mongo_col
         return "done"
     if drop_mongo_collections == "true":
         print("[INFO] Drop Mongo collections")
-        mongo_manager.drop_mongo_collections(db_name = "denormalization", collections= ["denorm_stations_vs_official_prices"])
+        mongo_manager.drop_mongo_collections(db_name = "denormalization", collections= ["denorm_station_vs_official_prices"])
     start_date_to_load, end_date_to_load = utils.determine_dates_to_load_from_mongo(year_to_load, db_name= "denormalization", collection= "denorm_station_vs_official_prices")
     df_denorm_stations = extract_denorm_stations_prices_from_mongo(start_date_to_load, end_date_to_load)
     if df_denorm_stations.empty:
