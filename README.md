@@ -10,7 +10,7 @@ This project processes **56 million records** of **oils prices changes** from Fr
 - **Flask** (API & scheduling)  
 - **MongoDB** (storage & denormalization)  
 - **Metabase** (visualization & dashboards)  
-- **Amazon S3** (backup & restoration)  
+- **Amazon S3 / IAM** (backup & restoration)  
 - **Pandas** (data transformation & aggregation)  
 - **Selenium** (web scraping and automation for government data)
 
@@ -21,6 +21,8 @@ A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 - Extraction, cleaning, anomaly filtering (**standard deviation + Z-score**), and structuring into two collections (`stations_infos` and `stations_prices`).  
 - Data is then **denormalized** into a **daily average price per oil type** across all stations to match the format of the official data.  
 - Results are loaded into **MongoDB**.
+
+![Gas Station Pipeline](./_documentation/schema_gas_stations.png)
 
 ### Official Data Pipeline
 - An **automated bot fills the government form** to generate the URL for downloading the CSV (the URL changes daily).  
