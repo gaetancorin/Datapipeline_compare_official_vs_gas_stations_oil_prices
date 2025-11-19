@@ -28,6 +28,8 @@ A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 - An **automated bot fills the government form** to generate the URL for downloading the CSV (the URL changes daily).  
 - Extract the CSV data using the URL, then **transform and load it into MongoDB** (data is already denormalized by the government into **weekly averages** per oil type).
 
+![Official Pipeline](./_documentation/schema_official_data.png)
+
 ## Graph Analysis
 - Data is analyzed in **Metabase**, which compares **observed daily oil prices** (gas stations data) with **official weekly oil prices** (official government data) to visualize differences.
 - Additional analysis identifies **daily price patterns in gas station data**, which are not visible in the weekly government data.
