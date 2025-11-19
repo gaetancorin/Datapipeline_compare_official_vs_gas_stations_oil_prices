@@ -34,6 +34,10 @@ A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 - Data is analyzed in **Metabase**, which compares **observed daily oil prices** (gas stations data) with **official weekly oil prices** (official government data) to visualize differences.
 - Additional analysis identifies **daily price patterns in gas station data**, which are not visible in the weekly government data.
 
+![Graph Comparaison Official and Gas Stations](./_documentation/graph_comparaison_official_gas_stations_price_gazole.png)
+
+![Gas Stations Price by Day of Week](./_documentation/gas_station_price_by_day_of_week.png)
+
 ## Infrastructure & Backup
 Two **Flask servers** manage infrastructure tasks with **S3 storage**:
 
