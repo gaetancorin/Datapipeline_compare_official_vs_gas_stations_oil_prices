@@ -22,22 +22,22 @@ A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 - Data is then **denormalized** into a **daily average price per oil type** across all stations to match the format of the official data.  
 - Results are loaded into **MongoDB**.
 
-![Gas Station Pipeline](./_documentation/schema_gas_stations.png)
+![Gas Station Pipeline](./_documentation/assets/schema_gas_stations.png)
 
 ### Official Data Pipeline
 - An **automated bot fills the government form** to generate the URL for downloading the CSV (the URL changes daily).  
 - Extract the CSV data using the URL, then **transform and load it into MongoDB** (data is already denormalized by the government into **weekly averages** per oil type).
 
-![Official Pipeline](./_documentation/schema_official_data.png)
+![Official Pipeline](./_documentation/assets/schema_official_data.png)
 
 ## Graph Analysis
 Data is analyzed in **Metabase**, which compares **observed daily oil prices** (gas stations data) with **official weekly oil prices** (official government data) to visualize differences.
 
-![Graph Comparaison Official and Gas Stations](./_documentation/graph_comparaison_official_gas_stations_price_gazole.png)
+![Graph Comparaison Official and Gas Stations](./_documentation/assets/graph_comparaison_official_gas_stations_price_gazole.png)
 
 Additional analysis identifies **daily price patterns in gas station data**, which are not visible in the weekly government data.
 
-![Gas Stations Price by Day of Week](./_documentation/gas_station_price_by_day_of_week.png)
+![Gas Stations Price by Day of Week](./_documentation/assets/gas_station_price_by_day_of_week.png)
 
 ## Infrastructure & Backup
 Two **Flask servers** manage infrastructure tasks with **S3 storage**:
@@ -45,7 +45,7 @@ Two **Flask servers** manage infrastructure tasks with **S3 storage**:
 - **`project_ETL` server**: Handles ETL processing as well as **MongoDB dumps and restoration** to Amazon S3 using APIs.  
 - **`project_METABASE` server**: Handles **Metabase dashboard backup and redeployment** to S3 via the API, ensuring all dashboards (charts, reports) are safely stored and restorable.
 
-![Schema Infrastructure](./_documentation/schema_architecture.png)
+![Schema Infrastructure](./_documentation/assets/schema_architecture.png)
 
 # Getting Started
 
@@ -71,7 +71,7 @@ This project is designed as a proof of concept to showcase my data engineering s
    git clone https://github.com/gaetancorin/Datapipeline_compare_official_vs_gas_stations_oil_prices.git
    ```
 
-2. Open the `Project_ETL` folder in your code editor and follow the instructions in the **README** to configure and run the pipelines.
+2. Open the `Project_ETL` folder in your code editor and follow the instructions in the [**README**](./project_ETL/README.md) to configure and run the pipelines.
 
 
-3. Open the `Project_METABASE` folder in your code editor and follow the instructions in the **README** to configure and deploy Metabase dashboards.
+3. Open the `Project_METABASE` folder in your code editor and follow the instructions in the [**README**](./project_METABASE/README.md) to configure and deploy Metabase dashboards.
