@@ -54,14 +54,14 @@ This project is designed as a proof of concept to showcase my data engineering s
 ### Pre-requisites
 
 * **MongoDB** installed and running
+* [**MongoDB Command Line Database Tools**](https://www.mongodb.com/try/download/database-tools) installed
 * **Docker** and **Docker Compose**
-* Account on **AWS S3 and IAM** with permissions:
+* [**AWS S3 Account**](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#) and [**IAM User**](https://us-east-1.console.aws.amazon.com/iam/home#/users) with permissions:
     - s3:GetObject
     - s3:PutObject
     - s3:DeleteObject
     - s3:ListBucket
 
-[Create AWS S3 Account](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#) | [Create AWS IAM User](https://us-east-1.console.aws.amazon.com/iam/home#/users)
 
 ### Setup and Installation
 

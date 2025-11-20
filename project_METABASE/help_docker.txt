@@ -1,24 +1,25 @@
--------------- DOCKER COMPOSE (FLASK + METABASE)---------------
-construire le docker compose:
+-------- HELP DOCKER COMPOSE (FLASK + METABASE) ---------------
+Build and start Docker Compose:
 docker-compose -p project_metabase up --build -d
 
-redemarrer le docker compose:
+Restart the Docker Compose:
 docker-compose -p project_metabase start
 
-arreter le docker compose:
+Stop the Docker Compose:
 docker-compose -p project_metabase stop
 
-supprimer le docker compose et docker associés:
+Remove the Docker Compose setup and associated containers:
 docker-compose -p project_metabase down
 
-
------------ docker METABASE (if only METABASE Docker)---------
-Lancer le docker opensource:
+------ HELP DOCKER METABASE ONLY (if you want to run Flask locally) --------
+Run the Metabase Docker container:
 docker run -d -p 3000:3000 --name metabase metabase/metabase
 
-redemarrer le docker existant:
+Restart the existing container:
 docker start metabase
 
-arreter le docker:
+Stop the container:
 docker stop metabase
+
+Remove the container:
 docker rm metabase
