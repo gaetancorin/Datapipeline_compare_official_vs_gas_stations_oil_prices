@@ -3,7 +3,7 @@
 
 [<img src="https://img.shields.io/badge/LinkedIn-Gaetan%20Corin%20–%20Data%20Engineer-blue.svg?logo=linkedin" alt="LinkedIn" style="vertical-align: middle;"/>](https://www.linkedin.com/in/gaetancorin/)
 
-This project processes **56 million records** of **oils prices changes** from French gas stations (2008 → today), and compares them with official government oil prices to analyze pricing differences.
+This project processes **56 million records** of **oil prices changes** from French gas stations (2008 → today), and compares them with official government oil prices to analyze pricing differences.
 
 ### Tech Stack
 - **Python** (ETL, data cleaning, automation)  
@@ -46,3 +46,32 @@ Two **Flask servers** manage infrastructure tasks with **S3 storage**:
 - **`project_METABASE` server**: Handles **Metabase dashboard backup and redeployment** to S3 via the API, ensuring all dashboards (charts, reports) are safely stored and restorable.
 
 ![Schema Infrastructure](./_documentation/schema_architecture.png)
+
+# Getting Started
+
+This project is designed as a proof of concept to showcase my data engineering skills. 
+
+### Pre-requisites
+
+* **MongoDB** installed and running
+* **Docker** and **Docker Compose**
+* Account on **AWS S3 and IAM** with permissions:
+    - s3:GetObject
+    - s3:PutObject
+    - s3:DeleteObject
+    - s3:ListBucket
+
+[Create AWS S3 Account](https://us-east-1.console.aws.amazon.com/s3/home?region=us-east-1#) | [Create AWS IAM User](https://us-east-1.console.aws.amazon.com/iam/home#/users)
+
+### Setup and Installation
+
+
+1. **Clone this repository** on your machine  
+   ```
+   git clone https://github.com/gaetancorin/Datapipeline_compare_official_vs_gas_stations_oil_prices.git
+   ```
+
+2. Open the `Project_ETL` folder in your code editor and follow the instructions in the **README** to configure and run the pipelines.
+
+
+3. Open the `Project_METABASE` folder in your code editor and follow the instructions in the **README** to configure and deploy Metabase dashboards.
