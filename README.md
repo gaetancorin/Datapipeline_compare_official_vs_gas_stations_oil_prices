@@ -15,7 +15,7 @@ This project processes **56 million records** of **oil prices changes** from Fre
 - **Selenium** (web scraping and automation for government data)
 
 ## Global Architecture
-![Schema Infrastructure](./_documentation/assets/schema_architecture.png)
+![Schema Infrastructure](./_documentation/assets/schema_architecture3.png)
 
 ## Data Pipelines
 A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
