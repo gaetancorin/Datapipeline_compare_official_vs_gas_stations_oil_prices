@@ -4,6 +4,9 @@
 
 This part of the project is responsible for performing all ETLs (Extract, Transform, Load) transformations.
 
+## Global Architecture
+![Schema Infrastructure](./_documentation/assets/schema_architecture_ETL.png)
+
 ## Prerequisites
 * **MongoDB** installed and running
 * [**MongoDB Command Line Database Tools**](https://www.mongodb.com/try/download/database-tools) installed
@@ -60,18 +63,24 @@ docker run -d -p 5000:5000 --name project_etl project_etl
 
 ## Recommended Tools & Documentation
 
+### ➡️ Data Sources
+- **Gas Station & Official Government Data**  
+  Comprehensive explanations of each dataset, formats, and usage:  
+  [Datasources.md](_documentation/Datasources.md)
+
 ### ➡️ API Resources
 - **Postman Collection**  
-  Import the Project_master_ETL.postman_collection.json file into Postman for a ready-to-use set of API requests.
+  Import the [Project_ETL.postman_collection.json](Project_ETL.postman_collection.json) file into Postman for a ready-to-use set of API requests.
 
 - **API Documentation**  
-  Detailed explanations, parameters, and usage examples of all ETL APIs and their endpoints:  
-  [ETL API Documentation](doc_api.md)
+  Detailed explanations, parameters, and usage examples of all APIs and their endpoints:  
+  [API_Documentation.md](_documentation/API_Documentation.md)
 
-### ➡️ Functions & Data Architecture
-- **ETL Pipelines & MongoDB Structure**  
+### ➡️ Functions & MongoDB Architecture
+- **Pipelines functions & MongoDB Structure**  
   Full architecture of the ETL functions and MongoDB collections:  
-  [API and Functions Architecture](API_and_ETL_Architecture.md)
+  [Functions_And_MongoDB_Architecture.md](_documentation/Functions_And_MongoDB_Architecture.md)
+
 
 ### ➡️ Technical Documentation
 - **ETL & Data Visualization**  
