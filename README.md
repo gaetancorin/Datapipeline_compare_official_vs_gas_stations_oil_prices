@@ -14,7 +14,10 @@ This project processes **56 million records** of **oil prices changes** from Fre
 - **Pandas** (data transformation & aggregation)  
 - **Selenium** (web scraping and automation for government data)
 
-## Pipelines and Visualizations
+## Global Architecture
+![Schema Infrastructure](./_documentation/assets/schema_architecture.png)
+
+## Data Pipelines
 A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 
 ### Gas Station Data Pipeline
@@ -30,22 +33,24 @@ A **daily Flask server** orchestrates two ETL pipelines feeding **MongoDB**:
 
 ![Official Pipeline](./_documentation/assets/schema_official_data.png)
 
-## Graph Analysis
+##  Visualizations
+
+### Data comparaisons
 Data is analyzed in **Metabase**, which compares **observed daily oil prices** (gas stations data) with **official weekly oil prices** (official government data) to visualize differences.
 
 ![Graph Comparaison Official and Gas Stations](./_documentation/assets/graph_comparaison_official_gas_stations_price_gazole.png)
+
+### Daily patterns
 
 Additional analysis identifies **daily price patterns in gas station data**, which are not visible in the weekly government data.
 
 ![Gas Stations Price by Day of Week](./_documentation/assets/gas_station_price_by_day_of_week.png)
 
-## Infrastructure & Backup
+## Backup & Redeployment
 Two **Flask servers** manage infrastructure tasks with **S3 storage**:
 
 - **`project_ETL` server**: Handles ETL processing as well as **MongoDB dumps and restoration** to Amazon S3 using APIs.  
 - **`project_METABASE` server**: Handles **Metabase dashboard backup and redeployment** to S3 via the API, ensuring all dashboards (charts, reports) are safely stored and restorable.
-
-![Schema Infrastructure](./_documentation/assets/schema_architecture.png)
 
 # Getting Started
 

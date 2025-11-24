@@ -1,4 +1,7 @@
 # Project_ETL
+
+[<img src="https://img.shields.io/badge/LinkedIn-Gaetan%20Corin%20–%20Data%20Engineer-blue.svg?logo=linkedin" alt="LinkedIn" style="vertical-align: middle;"/>](https://www.linkedin.com/in/gaetancorin/)
+
 This part of the project is responsible for performing all ETLs (Extract, Transform, Load) transformations.
 
 ## Prerequisites
