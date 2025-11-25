@@ -59,7 +59,7 @@ Run the container:
 ```
 docker run -d -p 5000:5000 --name project_etl project_etl
 ```
-(check [help_docker.txt](help_docker.txt) file if need more help)
+(check [help_docker.txt](help_docker.txt) file if need more help with docker)
 
 ## Recommended Tools & Documentation
 
@@ -71,6 +71,11 @@ docker run -d -p 5000:5000 --name project_etl project_etl
   Detailed explanations, parameters, and usage examples of all APIs and their endpoints:  
   [API_Documentation.md](_documentation/API_Documentation.md)
 
+### ➡️ Configuration Helper 📮(Recommended)
+- **Increasing WSL memory** (to be able to load full data)
+- **Managing MongoDB users & authentication**
+- **Connecting MongoDB** (local or cloud) **to Metabase**
+[Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md)
 
 ### ➡️ Data Sources
 - **Gas Station & Official Government Data**  

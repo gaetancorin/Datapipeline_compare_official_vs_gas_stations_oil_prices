@@ -59,7 +59,9 @@ This will:
 - Build and Start the Flask API project into container
 - Build and Start the Metabase into container
 
-(check [help_docker.txt](help_docker.txt) file if need more help)
+Metabase is now available at: http://localhost:3000
+
+(check [help_docker.txt](help_docker.txt) file if need more help with docker)
 
 ## Easy Starting
 For easier testing and faster setup, a sample metabase.db file is included directly in the Flask repository.
@@ -74,9 +76,11 @@ using Postman or any API client. ([check API Resources section right below](#️
 ```
 "zipname": "metabase_db_example"
 ```
-3. Once the database is restored, open Metabase at:
+3. Once the database is restored, open Metabase and check result at:
 http://localhost:3000
 (user/password: admin@admin.com ; admin31)
+
+([Here is an example of the dashboards result](./_documentation/dashboard_results_easy_starting.md))
 
 ## Recommended Tools & Documentation
 
@@ -87,3 +91,9 @@ http://localhost:3000
 - **API Documentation**  
   Detailed explanations, parameters, and usage examples of all APIs and their endpoints:  
   [API_Documentation.md](_documentation/API_Documentation.md)
+
+### ➡️ Configuration Helper 📮(Recommended)
+- **Increasing WSL memory** (to be able to load full data)
+- **Managing MongoDB users & authentication**
+- **Connecting MongoDB** (local or cloud) **to Metabase**
+[Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md)
