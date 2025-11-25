@@ -72,10 +72,10 @@ docker run -d -p 5000:5000 --name project_etl project_etl
   [API_Documentation.md](_documentation/API_Documentation.md)
 
 ### ➡️ Configuration Helper 📮(Recommended)
+This [Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md) help to:
 - **Increasing WSL memory** (to be able to load full data)
 - **Managing MongoDB users & authentication**
 - **Connecting MongoDB** (local or cloud) **to Metabase**
-[Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md)
 
 ### ➡️ Data Sources
 - **Gas Station & Official Government Data**  
@@ -88,8 +88,5 @@ docker run -d -p 5000:5000 --name project_etl project_etl
   Full architecture of the ETL functions and MongoDB collections:  
   [Functions_And_MongoDB_Architecture.md](_documentation/Functions_And_MongoDB_Architecture.md)
 
-
-### ➡️ Technical Documentation
-- **ETL & Data Visualization**  
-  Comprehensive technical documentation for understanding the ETL process and dashboards:  
-  [Technical Documentation PDF](https://open-documentations.s3.eu-west-3.amazonaws.com/Documentation+technique+Datapipeline_comparaison.pdf)
+### ➡️ Z-Score Visualization Notebook
+- This [Z_Score_Visualization.md](./_documentation/z_score_visualisation/z_score_visualization.md) allows you to **load a notebook to visualize the data before and after the z-score transformation**, helping to understand the data cleaning process.

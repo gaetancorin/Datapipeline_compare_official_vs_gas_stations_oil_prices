@@ -13,3 +13,5 @@ env.bak/
 venv.bak/
 
 outputs/
+
+z_score_visualization.ipynb

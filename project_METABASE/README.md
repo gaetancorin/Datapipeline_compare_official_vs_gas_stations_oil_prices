@@ -93,7 +93,8 @@ http://localhost:3000
   [API_Documentation.md](_documentation/API_Documentation.md)
 
 ### ➡️ Configuration Helper 📮(Recommended)
+This [Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md) help to:
 - **Increasing WSL memory** (to be able to load full data)
 - **Managing MongoDB users & authentication**
 - **Connecting MongoDB** (local or cloud) **to Metabase**
-[Configuration_Helper_Documentation.md](../_documentation/Configuration_Helper_Documentation.md)
+
