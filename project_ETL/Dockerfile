@@ -1,6 +1,6 @@
 FROM python:3.11.9-slim
 
-WORKDIR /project_master_ETL
+WORKDIR /project_ETL
 
 # Install Chrome ou Chromium
 RUN apt-get update && apt-get install -y \
