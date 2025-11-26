@@ -7,7 +7,7 @@ To visualize z-score transformation, you need to **load at least a Year in Mongo
 ## How to Visualize Z-Score Transformation
 
 1. **Download the notebook**  
-   - Double-click on the `load_zscore_visualisation_notebook.bat` file **to automatically download the notebook**, or open it manually via: https://open-documentations.s3.eu-west-3.amazonaws.com/z_score_visualisation.ipynb
+   - Double-click on the `load_zscore_visualization_notebook.bat` file (located right next to this document) **to automatically download the notebook**, or open it manually via: https://open-documentations.s3.eu-west-3.amazonaws.com/z_score_visualisation.ipynb
 
 2. **Save the notebook in the correct folder**  
    - Make sure the notebook is loaded into the `z_score_visualisation` folder.  

@@ -89,4 +89,4 @@ This [Configuration_Helper_Documentation.md](../_documentation/Configuration_Hel
   [Functions_And_MongoDB_Architecture.md](_documentation/Functions_And_MongoDB_Architecture.md)
 
 ### ➡️ Z-Score Visualization Notebook
-- This [Z_Score_Visualization.md](./_documentation/z_score_visualisation/z_score_visualization.md) allows you to **load a notebook to visualize the data before and after the z-score transformation**, helping to understand the data cleaning process.
+- This [Z_Score_Visualization.md](./_documentation/z_score_visualization/z_score_visualization.md) allows you to **load a notebook to visualize the data before and after the z-score transformation**, helping to understand the data cleaning process.
