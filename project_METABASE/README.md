@@ -59,7 +59,7 @@ This will:
 - Build and Start the Flask API project into container
 - Build and Start the Metabase into container
 
-Metabase is now available at: http://localhost:3000
+Metabase is now available at: http://localhost:3000 (user/password: admin@admin.com ; admin31)
 
 (check [help_docker.txt](help_docker.txt) file if need more help with docker)
 
